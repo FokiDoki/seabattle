@@ -1,9 +1,14 @@
 package org.seabattle.ships;
 
 import java.awt.*;
+import java.util.List;
 
 public class ShipOneDesk extends Ship {
     public ShipOneDesk(Point location) {
-        super(1, location);
+        super(location,
+                List.of(
+                        new ShipPart(new Point(0, 0))
+                ),
+                ShipDirection.VERTICAL);
     }
 }

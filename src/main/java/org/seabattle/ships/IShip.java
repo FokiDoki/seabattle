@@ -1,18 +1,20 @@
 package org.seabattle.ships;
 
-import org.seabattle.Strike;
 
 import java.awt.*;
-import java.util.Optional;
 
 public interface IShip {
-    int getSize();
-    Point getLocation();
+    Point getPosition();
 
     void restore();
 
-    Optional<Integer> tryHit(Point point, Strike strike);
+    boolean tryHit(Point point);
+
+    boolean isTouching(Point point);
 
     boolean isAlive();
+
+    boolean isPartAlive(Point absolutPosition);
+
 
 }
