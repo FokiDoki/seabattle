@@ -6,18 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameRules {
-    Map<Class<? extends IShip>, Integer> shipsCount;
+    Map<IShip, Integer> shipsCount;
 
-    public GameRules(Map<Class<? extends IShip>, Integer> shipsCount) {
+    public GameRules(Map<IShip, Integer> shipsCount) {
         this.shipsCount = shipsCount;
     }
 
-    public Set<Class<? extends IShip>> getAvailableShips(){
+    public Set<IShip> getAvailableShips(){
         return shipsCount.keySet();
     }
 
-    public int getShipsCount(Class<? extends IShip> shipClass){
-        return shipsCount.get(shipClass);
+    public int getShipsCount(IShip ship){
+        return shipsCount.get(ship);
     }
 
     public boolean shipCanBePlaced(IShip ship){
@@ -26,13 +26,13 @@ public class GameRules {
 
     public void placeShip(IShip ship){
         if (shipCanBePlaced(ship)){
-            shipsCount.put(ship.getClass(), shipsCount.get(ship.getClass()) - 1);
+            shipsCount.put(ship, shipsCount.get(ship.getClass()) - 1);
         } else {
             throw new IllegalArgumentException("Ship can't be placed");
         }
     }
 
     public void removeShip(IShip ship){
-        shipsCount.put(ship.getClass(), shipsCount.get(ship.getClass()) + 1);
+        shipsCount.put(ship, shipsCount.get(ship.getClass()) + 1);
     }
 }

@@ -77,6 +77,7 @@ public abstract class Ship implements IShip {
                 .findFirst();
     }
 
+    @Override
     public List<ShipPart> getParts(){
         return List.copyOf(parts);
     }

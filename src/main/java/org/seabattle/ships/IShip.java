@@ -2,8 +2,13 @@ package org.seabattle.ships;
 
 
 import java.awt.*;
+import java.util.List;
 
 public interface IShip {
+
+    int getSizeX();
+
+    int getSizeY();
     Point getPosition();
 
     void restore();
@@ -17,6 +22,8 @@ public interface IShip {
     boolean isAlive();
 
     boolean isPartAlive(Point absolutPosition);
+
+    List<ShipPart> getParts();
 
 
 }

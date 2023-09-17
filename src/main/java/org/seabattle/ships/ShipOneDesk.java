@@ -11,4 +11,8 @@ public class ShipOneDesk extends Ship {
                 ),
                 ShipDirection.VERTICAL);
     }
+
+    public ShipOneDesk(){
+        this(new Point(0,0));
+    }
 }

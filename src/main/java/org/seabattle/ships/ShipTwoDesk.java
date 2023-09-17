@@ -13,5 +13,9 @@ public class ShipTwoDesk extends Ship {
                 direction);
     }
 
+    public ShipTwoDesk(){
+        this(new Point(0,0), ShipDirection.HORIZONTAL);
+    }
+
 }
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 public abstract class ViewLanterna implements IView{
 
     protected Terminal terminal;
-    ViewLanterna(){
+    public ViewLanterna(){
         try {
             this.terminal = TerminalSingletonProvider.getInstance();
         } catch (IOException e) {

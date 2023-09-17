@@ -20,10 +20,10 @@ public class ShipPlacementController {
     private final Field playerField = new Field();
 
     @Getter
-    private ArrayList<Class<? extends IShip>> availableShips = new ArrayList<>(playerField.getGameRules().getAvailableShips());
+    private ArrayList<IShip> availableShips = new ArrayList<>(playerField.getGameRules().getAvailableShips());
 
     @Getter
-    private Class<? extends IShip> currentShip = availableShips.get(0);
+    private IShip currentShip = availableShips.get(0);
 
 
     public ShipPlacementController(Terminal terminal) {
@@ -42,8 +42,8 @@ public class ShipPlacementController {
                 .applyAll();
     }
 
-    public int getAvailableShipsCount(Class<? extends IShip> shipClass){
-        return playerField.getGameRules().getShipsCount(shipClass);
+    public int getAvailableShipsCount(IShip ship){
+        return playerField.getGameRules().getShipsCount(ship);
     }
 
 }

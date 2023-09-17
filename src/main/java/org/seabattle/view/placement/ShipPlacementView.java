@@ -6,6 +6,7 @@ import org.seabattle.ships.IShip;
 import org.seabattle.view.IView;
 import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.mapper.FieldToStringMapper;
+import org.seabattle.view.mapper.ShipMapper;
 
 public class ShipPlacementView extends ViewLanterna {
 
@@ -50,13 +51,12 @@ public class ShipPlacementView extends ViewLanterna {
     @SneakyThrows
     private void printShips(){
         terminal.setCursorPosition(32,9);
-        Class<? extends IShip> currentShip = controller.getCurrentShip();
+        IShip currentShip = controller.getCurrentShip();
         controller.getAvailableShips().forEach(ship -> {
             TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
             StringBuilder shipStringBuilder = new StringBuilder();
-            String shipName = ship.getSimpleName();
             String shipCount = String.valueOf(controller.getAvailableShipsCount(ship));
-            String shipFrame = frameRepository.getFrame(shipName);
+            String shipFrame = ShipMapper.map(ship);
             shipStringBuilder.append(shipFrame);
             shipStringBuilder.append("Left - ").append(shipCount);
             colorizeBackground(color, () -> {

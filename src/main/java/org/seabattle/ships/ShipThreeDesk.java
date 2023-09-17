@@ -13,4 +13,8 @@ public class ShipThreeDesk extends Ship {
                 ),
                 direction);
     }
+
+    public ShipThreeDesk(){
+        this(new Point(0,0), ShipDirection.HORIZONTAL);
+    }
 }
