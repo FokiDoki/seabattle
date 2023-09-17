@@ -31,7 +31,7 @@ public class Main implements ActionListener {
 
         ShipPlacementView shipPlacementView = new ShipPlacementView();
         MainMenuView mainMenuView = new MainMenuView(shipPlacementView);
-        shipPlacementView.init();
+        mainMenuView.init();
 
     }
 

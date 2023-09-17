@@ -53,6 +53,7 @@ public class MainMenuView extends ViewLanterna {
         skipLines(4);
         terminal.setCursorPosition(0, 19);
         printStrings(ship.split("\n"));
+        terminal.setForegroundColor(TextColor.ANSI.DEFAULT);
     }
 
     @SneakyThrows

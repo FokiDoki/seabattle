@@ -1,5 +1,6 @@
 package org.seabattle.view;
 
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.terminal.Terminal;
 import lombok.SneakyThrows;
 import org.seabattle.view.input.TerminalSingletonProvider;
@@ -26,8 +27,9 @@ public abstract class ViewLanterna implements IView{
     @SneakyThrows
     protected void printStrings(String... strings){
         for (String string : strings) {
+            TerminalPosition terminalPosition = terminal.getCursorPosition();
             terminal.putString(string);
-            terminal.putCharacter('\n');
+            terminal.setCursorPosition(terminalPosition.getColumn(), terminalPosition.getRow() + 1);
         }
         terminal.bell();
     }
@@ -35,8 +37,7 @@ public abstract class ViewLanterna implements IView{
     @SneakyThrows
     protected void skipLines(int lines){
         for (int i = 0; i < lines; i++) {
-
-            printStrings(" ".repeat(terminal.getTerminalSize().getColumns()));
+            terminal.putCharacter('\n');
         }
     }
 
