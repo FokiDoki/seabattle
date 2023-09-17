@@ -40,9 +40,8 @@ public abstract class ViewLanterna implements IView{
 
     @SneakyThrows
     protected void skipLines(int lines){
-        for (int i = 0; i < lines; i++) {
-            terminal.putCharacter('\n');
-        }
+        TerminalPosition terminalPosition = terminal.getCursorPosition();
+        terminal.setCursorPosition(terminalPosition.getColumn(), terminalPosition.getRow() + lines);
     }
 
     @SneakyThrows

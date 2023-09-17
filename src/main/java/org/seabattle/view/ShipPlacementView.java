@@ -1,15 +1,8 @@
 package org.seabattle.view;
 
-import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
-import org.seabattle.FIeld.Field;
 import org.seabattle.ships.IShip;
-import org.seabattle.view.input.ControlsManager;
-import org.seabattle.view.input.CursorField;
-
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class ShipPlacementView extends ViewLanterna{
 
@@ -26,30 +19,21 @@ public class ShipPlacementView extends ViewLanterna{
             """;
 
 
-    CursorField cursorField;
-    ControlsManager controlsManager = new ControlsManager();
 
-    FrameRepository frameRepository = new FrameRepository("src\\main\\resources\\frames\\ships");
 
-    private final Field playerField = new Field();
+
+    private final FrameRepository frameRepository = new FrameRepository("src\\main\\resources\\frames\\ships");
+
+    private final ShipPlacementController controller = new ShipPlacementController(terminal);
+
+
     @SneakyThrows
     @Override
     public void init() {
         printHeader();
         printField();
         printControls();
-        terminal.setCursorPosition(32,9);
         printShips();
-        cursorField = new CursorField(terminal);
-        cursorField.addAvailableZone(new TerminalPosition(5, 10), new TerminalPosition(24, 19), "field");
-        cursorField.reset();
-        controlsManager
-                .onKeyPress("Up").addListener(cursorField::moveUp).and()
-                .onKeyPress("Down").addListener(cursorField::moveDown).and()
-                .onKeyPress("Left").addListener(cursorField::moveLeft).and()
-                .onKeyPress("Right").addListener(cursorField::moveRight).and()
-                .applyAll();
-
     }
 
     private void printHeader() {
@@ -59,19 +43,38 @@ public class ShipPlacementView extends ViewLanterna{
         skipLines(1);
     }
 
+    @SneakyThrows
     private void printShips(){
-        Set<Class<? extends IShip>> ships = new TreeSet<>(Comparator.comparing(Class::getSimpleName));
-        ships.addAll(playerField.getGameRules().getAvailableShips());
-        ships.forEach(ship -> {
+        terminal.setCursorPosition(32,9);
+        Class<? extends IShip> currentShip = controller.getCurrentShip();
+        controller.getAvailableShips().forEach(ship -> {
+            TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
             StringBuilder shipStringBuilder = new StringBuilder();
             String shipName = ship.getSimpleName();
-            String shipCount = String.valueOf(playerField.getGameRules().getShipsCount(ship));
+            String shipCount = String.valueOf(controller.getAvailableShipsCount(ship));
             String shipFrame = frameRepository.getFrame(shipName);
             shipStringBuilder.append(shipFrame);
-            shipStringBuilder.append("Left - ").append(shipCount).append("\n \n");
-            printStrings(shipStringBuilder.toString());
+            shipStringBuilder.append("Left - ").append(shipCount);
+            colorizeBackground(color, () -> {
+                printStrings(shipStringBuilder.toString());
+            });
+            skipLines(1);
         });
 
+    }
+
+    @SneakyThrows
+    private void colorize(TextColor color, Runnable runnable){
+        terminal.setForegroundColor(color);
+        runnable.run();
+        terminal.setForegroundColor(TextColor.ANSI.DEFAULT);
+    }
+
+    @SneakyThrows
+    private void colorizeBackground(TextColor color, Runnable runnable){
+        terminal.setBackgroundColor(color);
+        runnable.run();
+        terminal.setBackgroundColor(TextColor.ANSI.DEFAULT);
     }
 
     private void printControls() {
@@ -79,7 +82,7 @@ public class ShipPlacementView extends ViewLanterna{
     }
 
     private void printField() {
-        String fieldString = FieldToStringMapper.map(playerField);
+        String fieldString = FieldToStringMapper.map(controller.getPlayerField());
         printStrings(fieldString);
     }
 
