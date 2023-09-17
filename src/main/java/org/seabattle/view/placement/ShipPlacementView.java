@@ -7,6 +7,7 @@ import org.seabattle.ships.IShip;
 import org.seabattle.view.IView;
 import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.mapper.FieldToStringMapper;
+import org.seabattle.view.mapper.ShipDirectionMapper;
 import org.seabattle.view.mapper.ShipSelectorMapper;
 
 public class ShipPlacementView extends ViewLanterna {
@@ -39,6 +40,7 @@ public class ShipPlacementView extends ViewLanterna {
         printField();
         printControls();
         printShips();
+        printRotationStatus();
         controller.init();
     }
 
@@ -62,6 +64,13 @@ public class ShipPlacementView extends ViewLanterna {
                 });
                 skipLines(1);
             });
+        });
+    }
+
+    public void printRotationStatus(){
+        drawFrame(new TerminalPosition(32, 7), () -> {
+            String rotationStatus = ShipDirectionMapper.map(controller.getCurrentShipDirection());
+            printStrings(rotationStatus);
         });
     }
 

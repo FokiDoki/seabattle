@@ -34,6 +34,7 @@ public class ShipPlacementController {
     private Class<? extends IShip> currentShip = availableShips.get(0);
     private int currentShipIndex = 0;
 
+    @Getter
     private ShipDirection currentShipDirection = ShipDirection.HORIZONTAL;
 
     private static final String FIELD_ZONE_NAME = "field";
@@ -59,7 +60,13 @@ public class ShipPlacementController {
                 .onKeyPress("Right").addListener(cursorField::moveRight).and()
                 .onKeyPress("E").addListener(this::nextShip).and()
                 .onKeyPress("Space").addListener(this::placeShip).and()
+                .onKeyPress("R").addListener(this::rotateShip).and()
                 .applyAll();
+    }
+
+    private void rotateShip() {
+        currentShipDirection = currentShipDirection == ShipDirection.HORIZONTAL ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
+        view.printRotationStatus();
     }
 
     @SneakyThrows
