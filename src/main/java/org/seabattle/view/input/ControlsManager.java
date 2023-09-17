@@ -9,8 +9,10 @@ public class ControlsManager {
 
     List<KeyListener> listeners = new ArrayList<>();
 
-    public KeyListenerNavigable onKeyRelease(String key){
-        KeyReleaseListener listener = new KeyReleaseListener(key);
+
+
+    public KeyListenerNavigable onKeyPress(String key){
+        KeyPressListener listener = new KeyPressListener(key);
         listeners.add(listener);
         return new KeyListenerNavigable(listener);
     }

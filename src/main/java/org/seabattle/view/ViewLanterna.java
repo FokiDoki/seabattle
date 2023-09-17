@@ -25,6 +25,10 @@ public abstract class ViewLanterna implements IView{
     }
 
     @SneakyThrows
+    protected void printStrings(String strings){
+        printStrings(strings.split("\n"));
+    }
+    @SneakyThrows
     protected void printStrings(String... strings){
         for (String string : strings) {
             TerminalPosition terminalPosition = terminal.getCursorPosition();
