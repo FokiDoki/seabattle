@@ -12,6 +12,8 @@ public interface IShip {
 
     boolean isTouching(Point point);
 
+    boolean isShipPart(Point point);
+
     boolean isAlive();
 
     boolean isPartAlive(Point absolutPosition);

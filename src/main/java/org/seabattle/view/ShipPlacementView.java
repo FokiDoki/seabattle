@@ -1,24 +1,18 @@
 package org.seabattle.view;
 
-import org.jnativehook.GlobalScreen;
-import org.seabattle.Field;
-import org.seabattle.view.input.AnyKeyReleaseListener;
-import org.seabattle.view.input.KeyListener;
+import org.seabattle.FIeld.Field;
 
-public class ShipPlacementView implements IView{
+public class ShipPlacementView extends ViewLanterna{
 
-    private Field playerField;
-
+    private final Field playerField = new Field();
     @Override
     public void init() {
-        System.out.println("ShipPlacementView");
-        KeyListener keyPressListener = new AnyKeyReleaseListener();
-        GlobalScreen.addNativeKeyListener(keyPressListener);
-        keyPressListener.addListener(this::printField);
+        printField();
     }
 
     private void printField() {
-
+        String fieldString = FieldToStringMapper.map(playerField);
+        printStrings(fieldString.split("\n"));
     }
 
     @Override

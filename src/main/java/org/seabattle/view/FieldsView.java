@@ -1,6 +1,6 @@
 package org.seabattle.view;
 
-import org.seabattle.Field;
+import org.seabattle.FIeld.Field;
 
 public class FieldsView {
 

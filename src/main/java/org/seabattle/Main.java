@@ -1,7 +1,5 @@
 package org.seabattle;
 
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
 import lombok.SneakyThrows;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -29,13 +27,11 @@ public class Main implements ActionListener {
         catch (NativeHookException ex) {
             System.exit(1);
         }
-        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-        Terminal terminal;
 
 
         ShipPlacementView shipPlacementView = new ShipPlacementView();
         MainMenuView mainMenuView = new MainMenuView(shipPlacementView);
-        mainMenuView.init();
+        shipPlacementView.init();
 
     }
 

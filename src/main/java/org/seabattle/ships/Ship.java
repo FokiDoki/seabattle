@@ -82,6 +82,11 @@ public abstract class Ship implements IShip {
         });
     }
 
+    @Override
+    public boolean isShipPart(Point point) {
+        return getPart(point).isPresent();
+    }
+
     private int getAlivePartsNumber() {
         return (int) parts.stream().filter(ShipPart::isAlive).count();
     }

@@ -1,4 +1,4 @@
-package org.seabattle;
+package org.seabattle.FIeld;
 
 import org.seabattle.ships.IShip;
 
