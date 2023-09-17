@@ -2,37 +2,39 @@ package org.seabattle.FIeld;
 
 import org.seabattle.ships.IShip;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class GameRules {
-    Map<IShip, Integer> shipsCount;
+    Map<Class<? extends IShip>, Integer> shipsCount;
 
-    public GameRules(Map<IShip, Integer> shipsCount) {
-        this.shipsCount = shipsCount;
+    public GameRules(Map<Class<? extends IShip>, Integer> shipsCount) {
+        this.shipsCount = new HashMap<>(shipsCount);
     }
 
-    public Set<IShip> getAvailableShips(){
+    public Set<Class<? extends IShip>> getAvailableShips(){
         return shipsCount.keySet();
     }
 
-    public int getShipsCount(IShip ship){
+    public int getShipsCount(Class<? extends IShip> ship){
         return shipsCount.get(ship);
     }
 
-    public boolean shipCanBePlaced(IShip ship){
-        return shipsCount.get(ship.getClass()) > 0;
+
+    public boolean isLimitReached(IShip ship){
+        return shipsCount.get(ship.getClass()) <= 0;
     }
 
     public void placeShip(IShip ship){
-        if (shipCanBePlaced(ship)){
-            shipsCount.put(ship, shipsCount.get(ship.getClass()) - 1);
+        if (!isLimitReached(ship)){
+            shipsCount.put(ship.getClass(), shipsCount.get(ship.getClass()) - 1);
         } else {
             throw new IllegalArgumentException("Ship can't be placed");
         }
     }
 
     public void removeShip(IShip ship){
-        shipsCount.put(ship, shipsCount.get(ship.getClass()) + 1);
+        shipsCount.put(ship.getClass(), shipsCount.get(ship) + 1);
     }
 }

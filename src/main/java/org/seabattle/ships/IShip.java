@@ -4,7 +4,7 @@ package org.seabattle.ships;
 import java.awt.*;
 import java.util.List;
 
-public interface IShip {
+public interface IShip extends Cloneable{
 
     int getSizeX();
 
@@ -25,5 +25,6 @@ public interface IShip {
 
     List<ShipPart> getParts();
 
+    ShipDirection getDirection();
 
 }

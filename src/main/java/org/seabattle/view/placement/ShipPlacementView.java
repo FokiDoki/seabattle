@@ -52,10 +52,10 @@ public class ShipPlacementView extends ViewLanterna {
     @SneakyThrows
     public void printShips(){
         drawFrame(new TerminalPosition(32,9), () ->{
-            IShip currentShip = controller.getCurrentShip();
+            Class<? extends IShip> currentShip = controller.getCurrentShip();
             controller.getAvailableShips().forEach(ship -> {
                 TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
-                String shipFrame = ShipSelectorMapper.map(ship,
+                String shipFrame = ShipSelectorMapper.map(controller.getShipInstance(ship),
                         String.valueOf(controller.getAvailableShipsCount(ship)));
                 colorizeBackground(color, () -> {
                     printStrings(shipFrame);
@@ -80,12 +80,17 @@ public class ShipPlacementView extends ViewLanterna {
     }
 
     private void printControls() {
-        printStrings(controls);
+        drawFrame(new TerminalPosition(0,21), () -> {
+            printStrings(controls);
+        });
+
     }
 
-    private void printField() {
-        String fieldString = FieldToStringMapper.map(controller.getPlayerField());
-        printStrings(fieldString);
+    public void printField() {
+        drawFrame(new TerminalPosition(0,8), () -> {
+            String fieldString = FieldToStringMapper.map(controller.getPlayerField());
+            printStrings(fieldString);
+        });
     }
 
     @Override

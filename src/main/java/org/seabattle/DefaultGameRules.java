@@ -11,10 +11,10 @@ import java.util.Map;
 public class DefaultGameRules extends GameRules {
     public DefaultGameRules() {
         super(Map.of(
-                new ShipOneDesk(), 4,
-                new ShipTwoDesk(), 3,
-                new ShipThreeDesk(), 2,
-                new ShipFourDesk(), 1
+                ShipOneDesk.class, 4,
+                ShipTwoDesk.class, 3,
+                ShipThreeDesk.class, 2,
+                ShipFourDesk.class, 1
         ));
     }
 }

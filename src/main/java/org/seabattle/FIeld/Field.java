@@ -31,7 +31,7 @@ public class Field {
     }
 
     public void placeShip(IShip ship) {
-        if (gameRules.shipCanBePlaced(ship)){
+        if (!gameRules.isLimitReached(ship)){
             Optional<IShip> touchingShip = getShipTouching(ship.getPosition());
             if (touchingShip.isEmpty()){
                 gameRules.placeShip(ship);
