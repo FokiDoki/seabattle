@@ -3,8 +3,8 @@ package org.seabattle;
 import lombok.SneakyThrows;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
-import org.seabattle.view.MainMenuView;
-import org.seabattle.view.ShipPlacementView;
+import org.seabattle.view.menu.MainMenuView;
+import org.seabattle.view.placement.ShipPlacementView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

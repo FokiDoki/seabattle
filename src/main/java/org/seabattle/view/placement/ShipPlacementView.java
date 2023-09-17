@@ -1,10 +1,13 @@
-package org.seabattle.view;
+package org.seabattle.view.placement;
 
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
 import org.seabattle.ships.IShip;
+import org.seabattle.view.IView;
+import org.seabattle.view.ViewLanterna;
+import org.seabattle.view.mapper.FieldToStringMapper;
 
-public class ShipPlacementView extends ViewLanterna{
+public class ShipPlacementView extends ViewLanterna {
 
     private final String header_name = """
             ███████ ███████ ████████ ██    ██ ██████
@@ -22,18 +25,19 @@ public class ShipPlacementView extends ViewLanterna{
 
 
 
-    private final FrameRepository frameRepository = new FrameRepository("src\\main\\resources\\frames\\ships");
 
-    private final ShipPlacementController controller = new ShipPlacementController(terminal);
+    private ShipPlacementController controller;
 
 
     @SneakyThrows
     @Override
     public void init() {
+        controller = new ShipPlacementController(terminal);
         printHeader();
         printField();
         printControls();
         printShips();
+        controller.init();
     }
 
     private void printHeader() {

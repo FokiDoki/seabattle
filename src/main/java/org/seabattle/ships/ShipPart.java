@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.awt.*;
 
 @Getter
-class ShipPart {
+public class ShipPart {
     private final Point position;
     private boolean isAlive = true;
 

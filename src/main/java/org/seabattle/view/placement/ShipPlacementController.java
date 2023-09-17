@@ -1,4 +1,4 @@
-package org.seabattle.view;
+package org.seabattle.view.placement;
 
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -30,7 +30,7 @@ public class ShipPlacementController {
         cursorField = new CursorField(terminal);
     }
 
-    private void setUpControls() {
+    public void init() {
         cursorField.addAvailableZone(new TerminalPosition(5, 10), new TerminalPosition(24, 19), "field");
         cursorField.reset();
 

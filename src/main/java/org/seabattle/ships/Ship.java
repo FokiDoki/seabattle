@@ -17,6 +17,9 @@ public abstract class Ship implements IShip {
     @Getter
     private Point position;
 
+    @Getter
+    private final ShipDirection direction;
+
     private final List<ShipPart> parts;
 
     protected Ship(Point position, List<ShipPart> parts, ShipDirection direction) {
@@ -25,6 +28,7 @@ public abstract class Ship implements IShip {
         if (direction==ShipDirection.HORIZONTAL){
             rotate();
         }
+        this.direction = direction;
         sizeX = parts.stream().mapToInt(part -> part.getPosition().x).max().orElse(0) + 1;
         sizeY = parts.stream().mapToInt(part -> part.getPosition().y).max().orElse(0) + 1;
     }
@@ -71,6 +75,10 @@ public abstract class Ship implements IShip {
         return parts.stream()
                 .filter(part -> part.getX()+position.x == absolutPosition.x && part.getY()+position.y == absolutPosition.y)
                 .findFirst();
+    }
+
+    public List<ShipPart> getParts(){
+        return List.copyOf(parts);
     }
 
 

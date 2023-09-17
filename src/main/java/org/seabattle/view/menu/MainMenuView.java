@@ -1,8 +1,10 @@
-package org.seabattle.view;
+package org.seabattle.view.menu;
 
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
 import org.jnativehook.GlobalScreen;
+import org.seabattle.view.IView;
+import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.input.AnyKeyReleaseListener;
 import org.seabattle.view.input.KeyListener;
 
