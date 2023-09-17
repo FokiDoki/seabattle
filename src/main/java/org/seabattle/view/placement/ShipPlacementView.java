@@ -1,12 +1,13 @@
 package org.seabattle.view.placement;
 
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
 import org.seabattle.ships.IShip;
 import org.seabattle.view.IView;
 import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.mapper.FieldToStringMapper;
-import org.seabattle.view.mapper.ShipMapper;
+import org.seabattle.view.mapper.ShipSelectorMapper;
 
 public class ShipPlacementView extends ViewLanterna {
 
@@ -19,7 +20,7 @@ public class ShipPlacementView extends ViewLanterna {
             """;
     private final String controls = """
             Controls: Use arrow keys to move the cursor; [ENTER] - start the game
-                      [R] - rotate [SPACE] - place [A] to place all randomly
+                      [R] - rotate [SPACE] - place [A] random [e] next ship
             """;
 
 
@@ -33,7 +34,7 @@ public class ShipPlacementView extends ViewLanterna {
     @SneakyThrows
     @Override
     public void init() {
-        controller = new ShipPlacementController(terminal);
+        controller = new ShipPlacementController(terminal, this);
         printHeader();
         printField();
         printControls();
@@ -49,22 +50,19 @@ public class ShipPlacementView extends ViewLanterna {
     }
 
     @SneakyThrows
-    private void printShips(){
-        terminal.setCursorPosition(32,9);
-        IShip currentShip = controller.getCurrentShip();
-        controller.getAvailableShips().forEach(ship -> {
-            TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
-            StringBuilder shipStringBuilder = new StringBuilder();
-            String shipCount = String.valueOf(controller.getAvailableShipsCount(ship));
-            String shipFrame = ShipMapper.map(ship);
-            shipStringBuilder.append(shipFrame);
-            shipStringBuilder.append("Left - ").append(shipCount);
-            colorizeBackground(color, () -> {
-                printStrings(shipStringBuilder.toString());
+    public void printShips(){
+        drawFrame(new TerminalPosition(32,9), () ->{
+            IShip currentShip = controller.getCurrentShip();
+            controller.getAvailableShips().forEach(ship -> {
+                TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
+                String shipFrame = ShipSelectorMapper.map(ship,
+                        String.valueOf(controller.getAvailableShipsCount(ship)));
+                colorizeBackground(color, () -> {
+                    printStrings(shipFrame);
+                });
+                skipLines(1);
             });
-            skipLines(1);
         });
-
     }
 
     @SneakyThrows

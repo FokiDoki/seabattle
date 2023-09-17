@@ -24,10 +24,15 @@ public class ShipPlacementController {
 
     @Getter
     private IShip currentShip = availableShips.get(0);
+    private int currentShipIndex = 0;
+
+    private final ShipPlacementView view;
 
 
-    public ShipPlacementController(Terminal terminal) {
+    public ShipPlacementController(Terminal terminal, ShipPlacementView view) {
         cursorField = new CursorField(terminal);
+        this.view = view;
+
     }
 
     public void init() {
@@ -39,11 +44,18 @@ public class ShipPlacementController {
                 .onKeyPress("Down").addListener(cursorField::moveDown).and()
                 .onKeyPress("Left").addListener(cursorField::moveLeft).and()
                 .onKeyPress("Right").addListener(cursorField::moveRight).and()
+                .onKeyPress("E").addListener(this::nextShip).and()
                 .applyAll();
     }
 
     public int getAvailableShipsCount(IShip ship){
         return playerField.getGameRules().getShipsCount(ship);
+    }
+
+    private void nextShip(){
+        currentShipIndex = (currentShipIndex + 1) % availableShips.size();
+        currentShip = availableShips.get(currentShipIndex);
+        view.printShips();
     }
 
 }

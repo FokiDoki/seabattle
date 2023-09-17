@@ -35,7 +35,17 @@ public abstract class ViewLanterna implements IView{
             terminal.putString(string);
             terminal.setCursorPosition(terminalPosition.getColumn(), terminalPosition.getRow() + 1);
         }
-        terminal.bell();
+        terminal.flush();
+    }
+
+    @SneakyThrows
+    @Override
+    public void drawFrame(TerminalPosition position, Runnable drawer){
+        TerminalPosition sourceTerminalPosition = terminal.getCursorPosition();
+        terminal.setCursorPosition(position);
+        drawer.run();
+        terminal.setCursorPosition(sourceTerminalPosition);
+        terminal.flush();
     }
 
     @SneakyThrows
