@@ -47,12 +47,8 @@ public class ShipPlacementController extends AutoControlsManagementController {
         cursorField.addAvailableZone(new TerminalPosition(5, 10), new TerminalPosition(24, 19),
                 FIELD_ZONE_NAME);
         cursorField.reset();
-
+        cursorField.addArrowListeners(controlsManager);
         controlsManager
-                .onKeyPress("Up").addListener(cursorField::moveUp).and()
-                .onKeyPress("Down").addListener(cursorField::moveDown).and()
-                .onKeyPress("Left").addListener(cursorField::moveLeft).and()
-                .onKeyPress("Right").addListener(cursorField::moveRight).and()
                 .onKeyPress("E").addListener(this::nextShip).and()
                 .onKeyPress("Space").addListener(this::placeShip).and()
                 .onKeyPress("R").addListener(this::rotateShip).and()

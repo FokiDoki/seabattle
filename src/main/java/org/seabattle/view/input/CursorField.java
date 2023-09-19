@@ -17,9 +17,6 @@ public class CursorField {
 
     List<Zone> availableZones = new ArrayList<>();
 
-    Map<Zone, List<Runnable>> zoneTriggers = new HashMap<>();
-
-
 
     @SneakyThrows
     public CursorField(Terminal terminal) {
@@ -31,11 +28,14 @@ public class CursorField {
         return this;
     }
 
-    public CursorField removeAvailableZone(String name){
-        availableZones.remove(new Zone(name));
-        return this;
-    }
 
+    public void addArrowListeners(ControlsManager controlsManager){
+        controlsManager
+                .onKeyPress("Up").addListener(this::moveUp).and()
+                .onKeyPress("Down").addListener(this::moveDown).and()
+                .onKeyPress("Left").addListener(this::moveLeft).and()
+                .onKeyPress("Right").addListener(this::moveRight);
+    }
 
     private Zone getZoneByName(String name){
         System.out.println(availableZones);

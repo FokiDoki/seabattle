@@ -32,7 +32,7 @@ public class FieldToStringMapper {
 
     private static void buildFieldBody(Field field, StringBuilder stringBuilder){
         for (int y = 0; y < field.getHeight(); y++) {
-            stringBuilder.append("%d\t".formatted(y+1));
+            stringBuilder.append("%d%s".formatted(y+1, spaceTabByNumber(y+1, 4)));
             stringBuilder.append(VERTICAL_BORDER);
             for (int x = 0; x < field.getWidth(); x++) {
                 for (int i = 0; i < 2; i++) {
@@ -57,19 +57,24 @@ public class FieldToStringMapper {
         }
     }
 
+    private static String spaceTabByNumber(int number, int tabSize){
+        int spacesCount = Math.max(0, tabSize-String.valueOf(number).length());
+        return " ".repeat(spacesCount);
+    }
+
     private static void buildNumericHeader(Field field, StringBuilder stringBuilder){
-        stringBuilder.append("\t");
+        stringBuilder.append("    ");
         stringBuilder.append(VERTICAL_BORDER);
-        for (int i = 0; i < field.getWidth(); i++) {
-            stringBuilder.append(i+1);
-            stringBuilder.append(" ");
+        for (int i = 1; i <= field.getWidth(); i++) {
+            stringBuilder.append(i);
+            stringBuilder.append(spaceTabByNumber(i, 2));
         }
         stringBuilder.append(VERTICAL_BORDER);
         stringBuilder.append("\n");
     }
 
     private static void buildUpperBorder(Field field, StringBuilder stringBuilder){
-        stringBuilder.append("\t");
+        stringBuilder.append("    ");
         stringBuilder.append(TOP_LEFT_CORNER);
         appendSymbols(stringBuilder, field.getWidth()*2, HORIZONTAL_BORDER);
         stringBuilder.append(TOP_RIGHT_CORNER);
@@ -77,7 +82,7 @@ public class FieldToStringMapper {
     }
 
     private static void buildDownBorder(Field field, StringBuilder stringBuilder){
-        stringBuilder.append("\t");
+        stringBuilder.append("    ");
         stringBuilder.append(BOTTOM_LEFT_CORNER);
         appendSymbols(stringBuilder, field.getWidth()*2, HORIZONTAL_BORDER);
         stringBuilder.append(BOTTOM_RIGHT_CORNER);
