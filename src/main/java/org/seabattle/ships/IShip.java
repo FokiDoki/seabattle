@@ -1,18 +1,30 @@
 package org.seabattle.ships;
 
-import org.seabattle.Strike;
 
 import java.awt.*;
-import java.util.Optional;
+import java.util.List;
 
-public interface IShip {
-    int getSize();
-    Point getLocation();
+public interface IShip extends Cloneable{
+
+    int getSizeX();
+
+    int getSizeY();
+    Point getPosition();
 
     void restore();
 
-    Optional<Integer> tryHit(Point point, Strike strike);
+    boolean tryHit(Point point);
+
+    boolean isTouching(IShip ship);
+
+    boolean isShipPart(Point point);
 
     boolean isAlive();
+
+    boolean isPartAlive(Point absolutPosition);
+
+    List<ShipPart> getParts();
+
+    ShipDirection getDirection();
 
 }

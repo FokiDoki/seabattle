@@ -1,60 +1,106 @@
 package org.seabattle.ships;
 
-import org.seabattle.Strike;
+import lombok.Getter;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-public class Ship implements IShip {
+public abstract class Ship implements IShip {
 
-    private final int size;
-    private final Point location;
+    @Getter
+    private final int sizeX;
 
-    private final int[] partsHealth;
+    @Getter
+    private final int sizeY;
 
-    private final int defaultHealth;
+    @Getter
+    private Point position;
 
-    public Ship(int size, Point location, int defaultHealth) {
-        this.size = size;
-        this.location = location;
-        this.partsHealth = new int[size];
-        this.defaultHealth = defaultHealth;
-        restore();
+    @Getter
+    private final ShipDirection direction;
+
+    private final List<ShipPart> parts;
+
+    protected Ship(Point position, List<ShipPart> parts, ShipDirection direction) {
+        this.parts = parts;
+        this.position = position;
+        if (direction==ShipDirection.HORIZONTAL){
+            rotate();
+        }
+        this.direction = direction;
+        sizeX = parts.stream().mapToInt(part -> part.getPosition().x).max().orElse(0) + 1;
+        sizeY = parts.stream().mapToInt(part -> part.getPosition().y).max().orElse(0) + 1;
     }
-
-    public Ship(int size, Point location) {
-        this(size, location, 100);
-    }
-
     @Override
     public void restore() {
-        Arrays.fill(partsHealth, defaultHealth);
+        parts.forEach(ShipPart::restore);
     }
-
     @Override
-    public Optional<Integer> tryHit(Point point, Strike strike) {
-        return Optional.empty();
+    public boolean tryHit(Point point) {
+        Optional<ShipPart> part = getPart(point);
+        if (part.isPresent()) {
+            ShipPart shipPart = part.get();
+            shipPart.hit();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean isAlive() {
-        return getTotalHealth() > 0;
+        return getAlivePartsNumber() > 0;
     }
 
-    private int getTotalHealth() {
-        return Arrays.stream(partsHealth).sum();
+    private void rotate(){
+        parts.forEach(part -> {
+            Point position = part.getPosition();
+            position.setLocation(position.y, position.x);
+        });
+    }
+
+
+
+
+    @Override
+    public boolean isPartAlive(Point absolutPosition) throws PartNotFoundException{
+        return getPart(absolutPosition)
+                .orElseThrow(() -> new PartNotFoundException(absolutPosition))
+                .isAlive();
+    }
+
+
+    private Optional<ShipPart> getPart(Point absolutPosition) throws IndexOutOfBoundsException {
+        return parts.stream()
+                .filter(part -> part.getX()+position.x == absolutPosition.x && part.getY()+position.y == absolutPosition.y)
+                .findFirst();
     }
 
     @Override
-    public int getSize() {
-        return size;
+    public List<ShipPart> getParts(){
+        return List.copyOf(parts);
+    }
+
+
+    @Override
+    public boolean isTouching(IShip ship) {
+        return parts.stream().anyMatch(part -> {
+            return ship.getParts().stream().anyMatch(part2 -> {
+                Point absolutPosition = part.getAbsolutPosition(position);
+                Point absolutPosition2 = part2.getAbsolutPosition(ship.getPosition());
+                return Math.abs(absolutPosition.x-absolutPosition2.x)<=1 && Math.abs(absolutPosition.y-absolutPosition2.y)<=1;
+            });
+        });
     }
 
     @Override
-    public Point getLocation() {
-        return location;
+    public boolean isShipPart(Point point) {
+        return getPart(point).isPresent();
     }
 
+    private int getAlivePartsNumber() {
+        return (int) parts.stream().filter(ShipPart::isAlive).count();
+    }
 
 }
