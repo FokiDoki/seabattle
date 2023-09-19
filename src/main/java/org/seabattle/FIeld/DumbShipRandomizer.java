@@ -36,9 +36,10 @@ public class DumbShipRandomizer implements ShipRandomizer{
         this.field = field;
         GameRules gameRules = field.getGameRules();
         gameRules.getAvailableShips().forEach(ship -> {
-                for (int i = 0; i < gameRules.getShipsCount(ship); i++) {
-                    placeShip(ship);
-                }
+            int shipsToPlace = gameRules.getShipsCount(ship);
+            for (int i = 0; i < shipsToPlace; i++) {
+                placeShip(ship);
+            }
         });
     }
 }

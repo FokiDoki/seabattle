@@ -1,6 +1,7 @@
 package org.seabattle.view;
 
 import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import lombok.SneakyThrows;
 import org.seabattle.view.input.TerminalSingletonProvider;
@@ -55,8 +56,27 @@ public abstract class ViewLanterna implements IView{
     }
 
     @SneakyThrows
+    protected void colorize(TextColor color, Runnable runnable){
+        terminal.setForegroundColor(color);
+        runnable.run();
+        terminal.setForegroundColor(TextColor.ANSI.DEFAULT);
+    }
+
+    @SneakyThrows
+    protected void colorizeBackground(TextColor color, Runnable runnable){
+        terminal.setBackgroundColor(color);
+        runnable.run();
+        terminal.setBackgroundColor(TextColor.ANSI.DEFAULT);
+    }
+
+    @SneakyThrows
     protected void clear(){
         terminal.clearScreen();
         terminal.bell();
+    }
+
+    @Override
+    public void destroy() {
+        clear();
     }
 }

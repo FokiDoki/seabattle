@@ -48,6 +48,10 @@ public class GameRules {
                 .newInstance(position, direction);
     }
 
+    public boolean isGameReady(){
+        return shipsCount.values().stream().allMatch(count -> count == 0);
+    }
+
 
 
     public void removeShip(IShip ship){

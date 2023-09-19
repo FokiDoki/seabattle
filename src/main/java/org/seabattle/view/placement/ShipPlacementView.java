@@ -74,19 +74,11 @@ public class ShipPlacementView extends ViewLanterna {
         });
     }
 
-    @SneakyThrows
-    private void colorize(TextColor color, Runnable runnable){
-        terminal.setForegroundColor(color);
-        runnable.run();
-        terminal.setForegroundColor(TextColor.ANSI.DEFAULT);
+    public void updateShipFields(){
+        printField();
+        printShips();
     }
 
-    @SneakyThrows
-    private void colorizeBackground(TextColor color, Runnable runnable){
-        terminal.setBackgroundColor(color);
-        runnable.run();
-        terminal.setBackgroundColor(TextColor.ANSI.DEFAULT);
-    }
 
     private void printControls() {
         drawFrame(new TerminalPosition(0,21), () -> {
@@ -100,6 +92,21 @@ public class ShipPlacementView extends ViewLanterna {
             String fieldString = FieldToStringMapper.map(controller.getPlayerField());
             printStrings(fieldString);
         });
+    }
+
+    public void printError(String error){
+        drawFrame(new TerminalPosition(45, 15), () -> {
+            colorize(TextColor.ANSI.RED, () -> {
+                printStrings("Error: " + error);
+            });
+        });
+    }
+
+
+    @Override
+    public void destroy() {
+        controller.destroy();
+        clear();
     }
 
 }

@@ -4,29 +4,20 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.terminal.Terminal;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.seabattle.FIeld.DumbShipRandomizer;
 import org.seabattle.FIeld.Field;
 import org.seabattle.FIeld.GameRules;
 import org.seabattle.FIeld.ShipRandomizer;
 import org.seabattle.ships.IShip;
 import org.seabattle.ships.ShipDirection;
+import org.seabattle.view.AutoControlsManagmentController;
 import org.seabattle.view.battle.BattleView;
-import org.seabattle.view.input.ControlsManager;
-import org.seabattle.view.input.CursorField;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ShipPlacementController {
-
-    Logger logger = LogManager.getLogger(ShipPlacementController.class);
-
-
-    private final ControlsManager controlsManager = new ControlsManager();
-
-    private final CursorField cursorField;
+public class ShipPlacementController extends AutoControlsManagmentController {
+    ShipRandomizer shipRandomizer = new DumbShipRandomizer();
 
     @Getter
     private final Field playerField = new Field();
@@ -47,7 +38,7 @@ public class ShipPlacementController {
 
 
     public ShipPlacementController(Terminal terminal, ShipPlacementView view) {
-        cursorField = new CursorField(terminal);
+        super(terminal);
         this.view = view;
 
     }
@@ -65,7 +56,8 @@ public class ShipPlacementController {
                 .onKeyPress("E").addListener(this::nextShip).and()
                 .onKeyPress("Space").addListener(this::placeShip).and()
                 .onKeyPress("R").addListener(this::rotateShip).and()
-                .onKeyPress("Enter").addListener(this::redirect).and()
+                .onKeyPress("A").addListener(this::placeShipsRandomly).and()
+                .onKeyPress("Enter").addListener(this::tryRedirect).and()
                 .applyAll();
     }
 
@@ -79,8 +71,7 @@ public class ShipPlacementController {
         IShip ship = getCurrentShipInstance();
         playerField.placeShip(getCurrentShipInstance());
         logger.info("Placed ship {}", ship.getPosition());
-        view.printField();
-        view.printShips();
+        view.updateShipFields();
     }
 
     private IShip getCurrentShipInstance() {
@@ -90,9 +81,24 @@ public class ShipPlacementController {
         return GameRules.getShipInstance(cursorPosition, currentShipDirection, currentShip);
     }
 
+    private void placeShipsRandomly(){
+        shipRandomizer.placeAllShips(playerField);
+        view.updateShipFields();
+    }
+
+
+
 
     public int getAvailableShipsCount(Class<? extends IShip> ship){
         return playerField.getGameRules().getShipsCount(ship);
+    }
+
+    public void tryRedirect(){
+        if (playerField.getGameRules().isGameReady()){
+            redirect();
+        } else {
+            view.printError("Not all ships are placed.\n Use [A] to place ships randomly \n or [E] to select next ship");
+        }
     }
 
     public void redirect() {
@@ -102,7 +108,6 @@ public class ShipPlacementController {
 
     private Field generateEnemyField(){
         Field field = new Field();
-        ShipRandomizer shipRandomizer = new DumbShipRandomizer();
         shipRandomizer.placeAllShips(field);
         return field;
     }
@@ -112,5 +117,4 @@ public class ShipPlacementController {
         currentShip = availableShips.get(currentShipIndex);
         view.printShips();
     }
-
 }
