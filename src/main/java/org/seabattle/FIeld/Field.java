@@ -34,6 +34,9 @@ public class Field {
     }
 
     public void placeShip(IShip ship) {
+        if (!isShipInField(ship)){
+            throw new IllegalArgumentException("Ship can't be placed: out of field");
+        }
         if (!gameRules.isLimitReached(ship)){
             Optional<IShip> touchingShip = getShipTouching(ship);
             if (touchingShip.isEmpty()){
@@ -49,15 +52,30 @@ public class Field {
         }
     }
 
-    public void tryHit(Point point){
+    private boolean isShipInField(IShip ship){
+        Point shipPosition = ship.getPosition();
+        return shipPosition.x >= 0 && shipPosition.y >= 0
+                && shipPosition.x + ship.getSizeX() <= width && shipPosition.y + ship.getSizeY() <= height;
+    }
+
+    public boolean isShipCanBePlaced(IShip ship){
+        return isShipInField(ship) && getShipTouching(ship).isEmpty();
+    }
+
+    public boolean tryHit(Point point){
         Optional<IShip> ship = getShip(point);
+
         if (ship.isPresent()){
             logger.debug("Strike to {}: hit", point);
+            hitsManager.addHit(point, CellStatus.HIT);
             ship.get().tryHit(point);
+            return true;
         } else {
             logger.debug("Strike to {}: missed", point);
+            hitsManager.addHit(point, CellStatus.MISS);
+            return false;
         }
-        hitsManager.addHit(point);
+
     }
 
     public Optional<IShip> getShipTouching(IShip ship){
@@ -79,6 +97,14 @@ public class Field {
         } else {
             return CellStatus.EMPTY;
         }
+    }
+
+    public boolean isAllShipsDestroyed(){
+        return ships.stream().noneMatch(IShip::isAlive);
+    }
+
+    public int getAliveShipsCount(){
+        return (int) ships.stream().filter(IShip::isAlive).count();
     }
 
 

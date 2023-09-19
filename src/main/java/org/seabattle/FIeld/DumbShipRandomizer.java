@@ -25,7 +25,7 @@ public class DumbShipRandomizer implements ShipRandomizer{
             Point point = GetRandomPointOnField();
             ShipDirection direction = GetRandomDirection();
             ship = GameRules.getShipInstance(point, direction, shipClass);
-        } while (field.getShipTouching(ship).isPresent());
+        } while (!field.isShipCanBePlaced(ship));
         field.placeShip(ship);
     }
 

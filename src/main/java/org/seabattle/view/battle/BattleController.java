@@ -3,6 +3,7 @@ package org.seabattle.view.battle;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.terminal.Terminal;
 import lombok.Getter;
+import org.seabattle.CellStatus;
 import org.seabattle.FIeld.Field;
 import org.seabattle.hitbot.HitBot;
 import org.seabattle.hitbot.RandomHitBot;
@@ -46,23 +47,64 @@ public class BattleController extends AutoControlsManagementController {
 
     public void hitEnemy(){
         Point point = cursorField.getPixelCursorPosition("enemyField");
-        enemyField.tryHit(point);
+        if (enemyField.getCellStatus(point) == CellStatus.MISS || enemyField.getCellStatus(point) == CellStatus.HIT) {
+            return;
+        }
+        boolean isHitSuccess = enemyField.tryHit(point);
         view.printEnemyField();
+        if (!isHitSuccess) {
+            hitPlayer();
+        }
+        checkWinner();
+        updateStats();
+    }
+
+    private void onWin() {
+        view.printWinMessage();
+        controlsManager.removeAll();
+    }
+
+    private void onLose() {
+        controlsManager.removeAll();
+        view.printLoseMessage();
+    }
+
+    private void sleep(int time){
         try {
-            Thread.sleep(1);
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             logger.error(e);
             System.exit(1);
         }
-        hitPlayer(hitBot.getHit());
     }
 
-    public void hitPlayer(Point point){
-        playerField.tryHit(point);
-        view.printPlayerField();
+    private void updateStats(){
+        view.printPlayerStats(playerField.getAliveShipsCount(),
+                playerField.getHitsManager().getHitsCount(CellStatus.HIT), playerField.getHitsManager().getHitsCount(CellStatus.MISS));
+        view.printEnemyStats(enemyField.getAliveShipsCount(),
+                enemyField.getHitsManager().getHitsCount(CellStatus.HIT), enemyField.getHitsManager().getHitsCount(CellStatus.MISS));
     }
 
 
 
+
+    public void hitPlayer(){
+        boolean isHitSuccess;
+        do {
+            isHitSuccess = playerField.tryHit(hitBot.getHit());
+            sleep(1);
+            view.printPlayerField();
+            checkWinner();
+            updateStats();
+        } while (isHitSuccess);
+    }
+
+    private void checkWinner(){
+        if (playerField.isAllShipsDestroyed()){
+            onLose();
+        } else if (enemyField.isAllShipsDestroyed()){
+            onWin();
+        }
+    }
 
 }

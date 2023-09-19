@@ -22,13 +22,42 @@ public class BattleView extends ViewLanterna {
             ░█▄▄█ ░█▄▄▄█ ░█▄▄█
             """;
 
+    private final String stats = """
+            Ships: %s   \t
+            Hits: %s   
+            Misses: %s   
+            """;
+
+    private final String winMessage = """
+            ██╗░░░██╗░█████╗░██╗░░░██╗  ░██╗░░░░░░░██╗██╗███╗░░██╗██╗
+            ╚██╗░██╔╝██╔══██╗██║░░░██║  ░██║░░██╗░░██║██║████╗░██║██║
+            ░╚████╔╝░██║░░██║██║░░░██║  ░╚██╗████╗██╔╝██║██╔██╗██║██║
+            ░░╚██╔╝░░██║░░██║██║░░░██║  ░░████╔═████║░██║██║╚████║╚═╝
+            ░░░██║░░░╚█████╔╝╚██████╔╝  ░░╚██╔╝░╚██╔╝░██║██║░╚███║██╗
+            ░░░╚═╝░░░░╚════╝░░╚═════╝░  ░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝
+            """;
+
+    private final String loseMessage = """
+██╗░░░██╗░█████╗░██╗░░░██╗  ██╗░░░░░░█████╗░░██████╗███████╗  ██╗░░██╗
+╚██╗░██╔╝██╔══██╗██║░░░██║  ██║░░░░░██╔══██╗██╔════╝██╔════╝  ╚═╝░██╔╝
+░╚████╔╝░██║░░██║██║░░░██║  ██║░░░░░██║░░██║╚█████╗░█████╗░░  ░░░██╔╝░
+░░╚██╔╝░░██║░░██║██║░░░██║  ██║░░░░░██║░░██║░╚═══██╗██╔══╝░░  ░░░╚██╗░
+░░░██║░░░╚█████╔╝╚██████╔╝  ███████╗╚█████╔╝██████╔╝███████╗  ██╗░╚██╗
+░░░╚═╝░░░░╚════╝░░╚═════╝░  ╚══════╝░╚════╝░╚═════╝░╚══════╝  ╚═╝░░╚═╝
+            """;
+
+
+
     private final String borderSymbol = "█";
 
     @Getter
     private final Point enemyFieldLocation = new Point(40, 7);
 
     private final String controls = """
-            Controls: Use arrow keys to move the cursor; [SPACE] - attack
+            Controls: 
+            Use arrow keys to
+             move the cursor; 
+             [SPACE] - attack
             """;
 
     BattleController controller;
@@ -43,6 +72,9 @@ public class BattleView extends ViewLanterna {
         printEnemyField();
         printPlayerSubTitle();
         printEnemySubTitle();
+        printControls();
+        printPlayerStats(controller.getPlayerField().getShips().size(), 0, 0);
+        printEnemyStats(controller.getPlayerField().getShips().size(), 0, 0);
     }
 
     public void printPlayerSubTitle(){
@@ -61,7 +93,6 @@ public class BattleView extends ViewLanterna {
     public void printBorder(){
         drawFrame(new TerminalPosition(38,5), () -> {
             printStrings((borderSymbol+"\n").repeat(20));
-            skipLines(1);
         });
     }
 
@@ -71,9 +102,39 @@ public class BattleView extends ViewLanterna {
         });
     }
 
+    public void printPlayerStats(int ships, int hits, int misses){
+        drawFrame(new TerminalPosition(1, 1), () -> {
+            printStrings(stats.formatted(ships, hits, misses));
+        });
+    }
+
+    public void printEnemyStats(int ships, int hits, int misses){
+        drawFrame(new TerminalPosition(42, 1), () -> {
+            printStrings(stats.formatted(ships, hits, misses));
+        });
+    }
+
+    public void printWinMessage(){
+        drawFrame(new TerminalPosition(12,9), () -> {
+            printStrings(winMessage);
+        });
+    }
+
     public void printEnemyField(){
         drawFrame(new TerminalPosition(enemyFieldLocation.x,enemyFieldLocation.y), () -> {
             printStrings(FieldToStringMapper.map(controller.getEnemyField()));
+        });
+    }
+
+    public void printLoseMessage(){
+        drawFrame(new TerminalPosition(5,9), () -> {
+            printStrings(loseMessage);
+        });
+    }
+
+    public void printControls(){
+        drawFrame(new TerminalPosition(60, 1), () -> {
+            printStrings(controls);
         });
     }
 
