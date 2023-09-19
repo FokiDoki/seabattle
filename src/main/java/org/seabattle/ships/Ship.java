@@ -84,10 +84,13 @@ public abstract class Ship implements IShip {
 
 
     @Override
-    public boolean isTouching(Point point) {
+    public boolean isTouching(IShip ship) {
         return parts.stream().anyMatch(part -> {
-            Point absolutPosition = part.getAbsolutPosition(position);
-            return Math.abs(absolutPosition.x-point.x)<=1 && Math.abs(absolutPosition.y-point.y)<=1;
+            return ship.getParts().stream().anyMatch(part2 -> {
+                Point absolutPosition = part.getAbsolutPosition(position);
+                Point absolutPosition2 = part2.getAbsolutPosition(ship.getPosition());
+                return Math.abs(absolutPosition.x-absolutPosition2.x)<=1 && Math.abs(absolutPosition.y-absolutPosition2.y)<=1;
+            });
         });
     }
 

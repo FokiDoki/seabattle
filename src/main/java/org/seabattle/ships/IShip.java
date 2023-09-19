@@ -15,7 +15,7 @@ public interface IShip extends Cloneable{
 
     boolean tryHit(Point point);
 
-    boolean isTouching(Point point);
+    boolean isTouching(IShip ship);
 
     boolean isShipPart(Point point);
 

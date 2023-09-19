@@ -3,8 +3,8 @@ package org.seabattle.view.placement;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
+import org.seabattle.FIeld.GameRules;
 import org.seabattle.ships.IShip;
-import org.seabattle.view.IView;
 import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.mapper.FieldToStringMapper;
 import org.seabattle.view.mapper.ShipDirectionMapper;
@@ -57,7 +57,7 @@ public class ShipPlacementView extends ViewLanterna {
             Class<? extends IShip> currentShip = controller.getCurrentShip();
             controller.getAvailableShips().forEach(ship -> {
                 TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
-                String shipFrame = ShipSelectorMapper.map(controller.getShipInstance(ship),
+                String shipFrame = ShipSelectorMapper.map(GameRules.getShipInstance(ship),
                         String.valueOf(controller.getAvailableShipsCount(ship)));
                 colorizeBackground(color, () -> {
                     printStrings(shipFrame);
@@ -102,7 +102,4 @@ public class ShipPlacementView extends ViewLanterna {
         });
     }
 
-    @Override
-    public void redirect(IView view) {
-    }
 }

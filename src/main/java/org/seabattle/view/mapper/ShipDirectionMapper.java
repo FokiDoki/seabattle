@@ -11,7 +11,7 @@ public class ShipDirectionMapper {
         if (shipDirection == ShipDirection.HORIZONTAL) {
             stringBuilder.append("==►");
         } else {
-            stringBuilder.append("▲  ");
+            stringBuilder.append("▼  ");
         }
         return stringBuilder.toString();
     }

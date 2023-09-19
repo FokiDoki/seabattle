@@ -1,2 +1,4 @@
-package org.seabattle.view.battle;public class BattleController {
+package org.seabattle.view.battle;
+
+public class BattleController {
 }

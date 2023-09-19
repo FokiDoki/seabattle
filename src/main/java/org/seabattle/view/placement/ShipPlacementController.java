@@ -6,9 +6,13 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.seabattle.FIeld.DumbShipRandomizer;
 import org.seabattle.FIeld.Field;
+import org.seabattle.FIeld.GameRules;
+import org.seabattle.FIeld.ShipRandomizer;
 import org.seabattle.ships.IShip;
 import org.seabattle.ships.ShipDirection;
+import org.seabattle.view.battle.BattleView;
 import org.seabattle.view.input.ControlsManager;
 import org.seabattle.view.input.CursorField;
 
@@ -61,6 +65,7 @@ public class ShipPlacementController {
                 .onKeyPress("E").addListener(this::nextShip).and()
                 .onKeyPress("Space").addListener(this::placeShip).and()
                 .onKeyPress("R").addListener(this::rotateShip).and()
+                .onKeyPress("Enter").addListener(this::redirect).and()
                 .applyAll();
     }
 
@@ -78,23 +83,28 @@ public class ShipPlacementController {
         view.printShips();
     }
 
-    @SneakyThrows
-    public IShip getShipInstance(Class<? extends IShip> ship){
-        return ship.getConstructor()
-                .newInstance();
-    }
-
-    @SneakyThrows
-    public IShip getCurrentShipInstance(){
+    private IShip getCurrentShipInstance() {
         Point cursorPosition = cursorField.getRelCursorPosition(FIELD_ZONE_NAME);
         System.out.println(cursorPosition);
         cursorPosition.x = cursorPosition.x/2;
-        return currentShip.getConstructor(Point.class, ShipDirection.class)
-                .newInstance(cursorPosition, currentShipDirection);
+        return GameRules.getShipInstance(cursorPosition, currentShipDirection, currentShip);
     }
+
 
     public int getAvailableShipsCount(Class<? extends IShip> ship){
         return playerField.getGameRules().getShipsCount(ship);
+    }
+
+    public void redirect() {
+        BattleView battleView = new BattleView(playerField, generateEnemyField());
+        view.redirect(battleView);
+    }
+
+    private Field generateEnemyField(){
+        Field field = new Field();
+        ShipRandomizer shipRandomizer = new DumbShipRandomizer();
+        shipRandomizer.placeAllShips(field);
+        return field;
     }
 
     private void nextShip(){

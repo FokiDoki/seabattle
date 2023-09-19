@@ -1,7 +1,10 @@
 package org.seabattle.FIeld;
 
+import lombok.SneakyThrows;
 import org.seabattle.ships.IShip;
+import org.seabattle.ships.ShipDirection;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +36,19 @@ public class GameRules {
             throw new IllegalArgumentException("Ship can't be placed");
         }
     }
+    @SneakyThrows
+    public static IShip getShipInstance(Class<? extends IShip> ship){
+        return ship.getConstructor()
+                .newInstance();
+    }
+
+    @SneakyThrows
+    public static IShip getShipInstance(Point position, ShipDirection direction, Class<? extends IShip> ship){
+        return ship.getConstructor(Point.class, ShipDirection.class)
+                .newInstance(position, direction);
+    }
+
+
 
     public void removeShip(IShip ship){
         shipsCount.put(ship.getClass(), shipsCount.get(ship) + 1);
