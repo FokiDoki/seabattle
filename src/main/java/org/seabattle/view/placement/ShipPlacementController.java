@@ -10,13 +10,13 @@ import org.seabattle.FIeld.GameRules;
 import org.seabattle.FIeld.ShipRandomizer;
 import org.seabattle.ships.IShip;
 import org.seabattle.ships.ShipDirection;
-import org.seabattle.view.AutoControlsManagmentController;
+import org.seabattle.view.AutoControlsManagementController;
 import org.seabattle.view.battle.BattleView;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ShipPlacementController extends AutoControlsManagmentController {
+public class ShipPlacementController extends AutoControlsManagementController {
     ShipRandomizer shipRandomizer = new DumbShipRandomizer();
 
     @Getter

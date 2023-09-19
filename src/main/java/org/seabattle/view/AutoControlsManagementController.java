@@ -7,13 +7,13 @@ import org.seabattle.view.input.ControlsManager;
 import org.seabattle.view.input.CursorField;
 import org.seabattle.view.placement.ShipPlacementController;
 
-public class AutoControlsManagmentController implements IController{
+public class AutoControlsManagementController implements IController{
     protected Logger logger = LogManager.getLogger(ShipPlacementController.class);
     protected final ControlsManager controlsManager = new ControlsManager();
 
     protected final CursorField cursorField;
 
-    public AutoControlsManagmentController(Terminal terminal) {
+    public AutoControlsManagementController(Terminal terminal) {
         cursorField = new CursorField(terminal);
     }
 

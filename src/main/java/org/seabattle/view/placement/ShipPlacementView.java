@@ -31,7 +31,6 @@ public class ShipPlacementView extends ViewLanterna {
 
     private ShipPlacementController controller;
 
-
     @SneakyThrows
     @Override
     public void init() {
@@ -106,7 +105,7 @@ public class ShipPlacementView extends ViewLanterna {
     @Override
     public void destroy() {
         controller.destroy();
-        clear();
+        super.destroy();
     }
 
 }

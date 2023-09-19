@@ -17,6 +17,12 @@ public class ControlsManager {
         return new KeyListenerNavigable(listener);
     }
 
+    public KeyListenerNavigable onAnyKeyPress(){
+        AnyKeyReleaseListener listener = new AnyKeyReleaseListener();
+        listeners.add(listener);
+        return new KeyListenerNavigable(listener);
+    }
+
     public void applyAll(){
         listeners.forEach(GlobalScreen::addNativeKeyListener);
     }
