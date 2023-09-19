@@ -1,7 +1,11 @@
 package org.seabattle.FIeld;
 
+import lombok.SneakyThrows;
 import org.seabattle.ships.IShip;
+import org.seabattle.ships.ShipDirection;
 
+import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,30 +13,42 @@ public class GameRules {
     Map<Class<? extends IShip>, Integer> shipsCount;
 
     public GameRules(Map<Class<? extends IShip>, Integer> shipsCount) {
-        this.shipsCount = shipsCount;
+        this.shipsCount = new HashMap<>(shipsCount);
     }
 
     public Set<Class<? extends IShip>> getAvailableShips(){
         return shipsCount.keySet();
     }
 
-    public int getShipsCount(Class<? extends IShip> shipClass){
-        return shipsCount.get(shipClass);
+    public int getShipsCount(Class<? extends IShip> ship){
+        return shipsCount.get(ship);
     }
 
-    public boolean shipCanBePlaced(IShip ship){
-        return shipsCount.get(ship.getClass()) > 0;
+
+    public boolean isLimitReached(IShip ship){
+        return shipsCount.get(ship.getClass()) <= 0;
     }
 
     public void placeShip(IShip ship){
-        if (shipCanBePlaced(ship)){
+        if (!isLimitReached(ship)){
             shipsCount.put(ship.getClass(), shipsCount.get(ship.getClass()) - 1);
         } else {
             throw new IllegalArgumentException("Ship can't be placed");
         }
     }
+    @SneakyThrows
+    public static IShip getShipInstance(Class<? extends IShip> ship){
+        return ship.getConstructor()
+                .newInstance();
+    }
 
-    public void removeShip(IShip ship){
-        shipsCount.put(ship.getClass(), shipsCount.get(ship.getClass()) + 1);
+    @SneakyThrows
+    public static IShip getShipInstance(Point position, ShipDirection direction, Class<? extends IShip> ship){
+        return ship.getConstructor(Point.class, ShipDirection.class)
+                .newInstance(position, direction);
+    }
+
+    public boolean isGameReady(){
+        return shipsCount.values().stream().allMatch(count -> count == 0);
     }
 }

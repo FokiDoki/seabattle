@@ -31,17 +31,18 @@ public class Field {
     }
 
     public void placeShip(IShip ship) {
-        if (gameRules.shipCanBePlaced(ship)){
-            Optional<IShip> touchingShip = getShipTouching(ship.getPosition());
+        if (!gameRules.isLimitReached(ship)){
+            Optional<IShip> touchingShip = getShipTouching(ship);
             if (touchingShip.isEmpty()){
                 gameRules.placeShip(ship);
                 ships.add(ship);
+
             } else {
                 throw new ShipAlreadyExistsException(touchingShip.get());
             }
 
         } else {
-            throw new IllegalArgumentException("Ship can't be placed");
+            throw new IllegalArgumentException("Ship can't be placed: limit reached");
         }
     }
 
@@ -53,8 +54,10 @@ public class Field {
         }
     }
 
-    public Optional<IShip> getShipTouching(Point point){
-        return ships.stream().filter(ship -> ship.isTouching(point)).findFirst();
+    public Optional<IShip> getShipTouching(IShip ship){
+        return ships.stream().filter(ship2 ->
+                ship2.isTouching(ship)
+        ).findFirst();
     }
 
     public Optional<IShip> getShip(Point point) {
@@ -71,5 +74,6 @@ public class Field {
             return CellStatus.EMPTY;
         }
     }
+
 
 }

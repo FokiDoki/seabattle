@@ -6,12 +6,13 @@ import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class CursorField {
 
     private final Terminal terminal;
-    private final TerminalPosition startPosition;
     Logger logger = LogManager.getLogger(CursorField.class);
 
     List<Zone> availableZones = new ArrayList<>();
@@ -23,7 +24,6 @@ public class CursorField {
     @SneakyThrows
     public CursorField(Terminal terminal) {
         this.terminal = terminal;
-        this.startPosition = terminal.getCursorPosition();
     }
 
     public CursorField addAvailableZone(TerminalPosition start, TerminalPosition end, String name){
@@ -38,6 +38,7 @@ public class CursorField {
 
 
     private Zone getZoneByName(String name){
+        System.out.println(availableZones);
         return availableZones.stream()
                 .filter(zone -> zone.name.equals(name))
                 .findFirst().orElse(null);
@@ -75,6 +76,17 @@ public class CursorField {
 
     public void moveRight(){
         moveCursor(1, 0);
+    }
+
+    @SneakyThrows
+    public Point getRelCursorPosition(String zoneName){
+        Zone zone = getZoneByName(zoneName);
+        TerminalPosition cursorPosition = terminal.getCursorPosition();
+        TerminalPosition zoneStartPosition = zone.start;
+         Point relativePos = new Point(cursorPosition.getColumn() - zoneStartPosition.getColumn(),
+                cursorPosition.getRow() - zoneStartPosition.getRow());
+        logger.debug("Relative position of cursor in zone {} is {}", zoneName, relativePos);
+        return relativePos;
     }
 
     private static class Zone{

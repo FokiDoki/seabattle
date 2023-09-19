@@ -1,4 +1,4 @@
-package org.seabattle.view;
+package org.seabattle.view.mapper;
 
 import org.seabattle.FIeld.Field;
 
@@ -6,19 +6,19 @@ import java.awt.*;
 
 public class FieldToStringMapper {
 
-    private static final String EMPTY_CELL = "░";
-    private static final String SHIP_CELL = "O";
-    private static final String HIT_CELL = "X";
-    private static final String MISS_CELL = "M";
+    static final String EMPTY_CELL = "░";
+    static final String SHIP_CELL = "O";
+    static final String HIT_CELL = "X";
+    static final String MISS_CELL = "M";
 
-    private static final String HORIZONTAL_BORDER = "═";
+    static final String HORIZONTAL_BORDER = "═";
 
-    private static final String VERTICAL_BORDER = "║";
+    static final String VERTICAL_BORDER = "║";
 
-    private static final String TOP_LEFT_CORNER = "╔";
-    private static final String TOP_RIGHT_CORNER = "╗";
-    private static final String BOTTOM_LEFT_CORNER = "╚";
-    private static final String BOTTOM_RIGHT_CORNER = "╝";
+    static final String TOP_LEFT_CORNER = "╔";
+    static final String TOP_RIGHT_CORNER = "╗";
+    static final String BOTTOM_LEFT_CORNER = "╚";
+    static final String BOTTOM_RIGHT_CORNER = "╝";
 
 
     public static String map(Field field) {

@@ -1,10 +1,10 @@
-package org.seabattle.view;
+package org.seabattle.view.menu;
 
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
-import org.jnativehook.GlobalScreen;
-import org.seabattle.view.input.AnyKeyReleaseListener;
-import org.seabattle.view.input.KeyListener;
+import org.seabattle.view.IController;
+import org.seabattle.view.IView;
+import org.seabattle.view.ViewLanterna;
 
 public class MainMenuView extends ViewLanterna {
 
@@ -25,22 +25,16 @@ public class MainMenuView extends ViewLanterna {
                __..--``         /                    \\          ``--..__
               \\_______________/~~~~~~~~~~~~~~~~~~~~~~\\_______________/""";
 
-
-    KeyListener keyPressListener = new AnyKeyReleaseListener();
-    IView redirectView;
+    IController controller;
 
     public MainMenuView(IView redirectView) {
-        this.redirectView = redirectView;
+        controller = new MainMenuController(terminal, this, redirectView);
     }
 
     @SneakyThrows
     @Override
     public void init() {
         printStaticContent();
-        GlobalScreen.addNativeKeyListener(keyPressListener);
-        keyPressListener.addListener(() -> {
-            redirect(redirectView);
-        });
     }
 
     @SneakyThrows
@@ -56,11 +50,10 @@ public class MainMenuView extends ViewLanterna {
         terminal.setForegroundColor(TextColor.ANSI.DEFAULT);
     }
 
-    @SneakyThrows
     @Override
     public void destroy() {
-        GlobalScreen.removeNativeKeyListener(keyPressListener);
-        clear();
+        controller.destroy();
+        super.destroy();
     }
 
 }

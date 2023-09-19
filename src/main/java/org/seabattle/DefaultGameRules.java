@@ -1,7 +1,10 @@
 package org.seabattle;
 
 import org.seabattle.FIeld.GameRules;
-import org.seabattle.ships.*;
+import org.seabattle.ships.ShipFourDesk;
+import org.seabattle.ships.ShipOneDesk;
+import org.seabattle.ships.ShipThreeDesk;
+import org.seabattle.ships.ShipTwoDesk;
 
 import java.util.Map;
 
