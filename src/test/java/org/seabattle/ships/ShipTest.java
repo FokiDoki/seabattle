@@ -45,7 +45,7 @@ public class ShipTest {
     }
     @Test
     public void isAliveFalse() {
-        IShip ship = new ShipOneDesk(new Point(0, 0));
+        IShip ship = new ShipOneDesk(new Point(0, 0), ShipDirection.HORIZONTAL);
         ship.tryHit(new Point(0, 0));
         assertFalse(ship.isAlive());
     }

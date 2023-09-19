@@ -1,18 +1,17 @@
 package org.seabattle.FIeld;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class HitsManager {
 
-    private final HashMap<? extends Player, HashSet<Point>> hits = new HashMap<>();
+    private final HashSet<Point> hits = new HashSet<>();
 
-    public void addHit(Point point, Player player){
-        hits.get(player).add(point);
+    public void addHit(Point point){
+        hits.add(point);
     }
 
     public boolean isHit(Point point){
-        return hits.values().stream().anyMatch(points -> points.contains(point));
+        return hits.contains(point);
     }
 }

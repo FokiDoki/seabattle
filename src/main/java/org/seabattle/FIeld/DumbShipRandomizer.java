@@ -32,7 +32,6 @@ public class DumbShipRandomizer implements ShipRandomizer{
 
     @Override
     public void placeAllShips(Field field) {
-        System.out.println("Placing all ships");
         this.field = field;
         GameRules gameRules = field.getGameRules();
         gameRules.getAvailableShips().forEach(ship -> {

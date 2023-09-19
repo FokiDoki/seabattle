@@ -1,6 +1,8 @@
 package org.seabattle.FIeld;
 
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.seabattle.CellStatus;
 import org.seabattle.DefaultGameRules;
 import org.seabattle.ShipAlreadyExistsException;
@@ -19,6 +21,7 @@ public class Field {
     private final GameRules gameRules;
     private final List<IShip> ships = new ArrayList<>();
     private final HitsManager hitsManager = new HitsManager();
+    private final Logger logger = LogManager.getLogger(Field.class);
 
     public Field() {
         this(10, 10, new DefaultGameRules());
@@ -46,12 +49,15 @@ public class Field {
         }
     }
 
-    public void tryHit(Point point, Player player){
+    public void tryHit(Point point){
         Optional<IShip> ship = getShip(point);
         if (ship.isPresent()){
+            logger.debug("Strike to {}: hit", point);
             ship.get().tryHit(point);
-            hitsManager.addHit(point, player);
+        } else {
+            logger.debug("Strike to {}: missed", point);
         }
+        hitsManager.addHit(point);
     }
 
     public Optional<IShip> getShipTouching(IShip ship){

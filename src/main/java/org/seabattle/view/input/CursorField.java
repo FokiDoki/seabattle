@@ -59,6 +59,7 @@ public class CursorField {
 
     @SneakyThrows
     public void reset(){
+        logger.debug("Resetting cursor position to {}", availableZones.get(0).start);
         terminal.setCursorPosition(availableZones.get(0).start);
     }
 
@@ -86,6 +87,12 @@ public class CursorField {
          Point relativePos = new Point(cursorPosition.getColumn() - zoneStartPosition.getColumn(),
                 cursorPosition.getRow() - zoneStartPosition.getRow());
         logger.debug("Relative position of cursor in zone {} is {}", zoneName, relativePos);
+        return relativePos;
+    }
+
+    public Point getPixelCursorPosition(String zoneName){
+        Point relativePos = getRelCursorPosition(zoneName);
+        relativePos.x = relativePos.x/2;
         return relativePos;
     }
 

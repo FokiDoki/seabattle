@@ -71,9 +71,7 @@ public class ShipPlacementController extends AutoControlsManagementController {
     }
 
     private IShip getCurrentShipInstance() {
-        Point cursorPosition = cursorField.getRelCursorPosition(FIELD_ZONE_NAME);
-        System.out.println(cursorPosition);
-        cursorPosition.x = cursorPosition.x/2;
+        Point cursorPosition = cursorField.getPixelCursorPosition(FIELD_ZONE_NAME);
         return GameRules.getShipInstance(cursorPosition, currentShipDirection, currentShip);
     }
 
