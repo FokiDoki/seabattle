@@ -51,10 +51,4 @@ public class GameRules {
     public boolean isGameReady(){
         return shipsCount.values().stream().allMatch(count -> count == 0);
     }
-
-
-
-    public void removeShip(IShip ship){
-        shipsCount.put(ship.getClass(), shipsCount.get(ship) + 1);
-    }
 }
