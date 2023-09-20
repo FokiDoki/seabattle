@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class RandomHitBot implements HitBot{
 
-    private Iterator<Point> hits;
+    private final Iterator<Point> hits;
 
 
     public RandomHitBot(Field field) {
