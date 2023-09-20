@@ -5,10 +5,10 @@ import org.seabattle.ships.ShipPart;
 
 import java.util.List;
 
-public class ShipMapper {
+public class ShipMapper implements Mapper<IShip>{
 
 
-    public static String map(IShip ship){
+    public String map(IShip ship){
         List<ShipPart> parts = ship.getParts();
         StringBuilder stringBuilder = new StringBuilder();
         for (int y = 0; y<ship.getSizeY(); y++){

@@ -50,6 +50,9 @@ public class BattleView extends ViewLanterna {
 
     private final String borderSymbol = "█";
 
+    FieldToStringMapper fieldToStringMapper = new FieldToStringMapper();
+
+
     @Getter
     private final Point enemyFieldLocation = new Point(40, 7);
 
@@ -98,7 +101,7 @@ public class BattleView extends ViewLanterna {
 
     public void printPlayerField(){
         drawFrame(new TerminalPosition(6,7), () -> {
-            printStrings(FieldToStringMapper.map(controller.getPlayerField()));
+            printStrings(fieldToStringMapper.map(controller.getPlayerField()));
         });
     }
 
@@ -122,7 +125,7 @@ public class BattleView extends ViewLanterna {
 
     public void printEnemyField(){
         drawFrame(new TerminalPosition(enemyFieldLocation.x,enemyFieldLocation.y), () -> {
-            printStrings(FieldToStringMapper.map(controller.getEnemyField()));
+            printStrings(fieldToStringMapper.map(controller.getEnemyField()));
         });
     }
 

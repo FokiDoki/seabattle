@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.seabattle.CellStatus;
 import org.seabattle.FIeld.Field;
 import org.seabattle.hitbot.HitBot;
-import org.seabattle.hitbot.RandomHitBot;
+import org.seabattle.hitbot.SmartRandomHitBot;
 import org.seabattle.view.AutoControlsManagementController;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ public class BattleController extends AutoControlsManagementController {
         this.playerField = playerField;
         this.view = view;
         this.enemyField = enemyField;
-        this.hitBot= new RandomHitBot(enemyField);
+        this.hitBot= new SmartRandomHitBot(playerField);
     }
 
     public void init() {
@@ -47,7 +47,7 @@ public class BattleController extends AutoControlsManagementController {
 
     public void hitEnemy(){
         Point point = cursorField.getPixelCursorPosition("enemyField");
-        if (enemyField.getCellStatus(point) == CellStatus.MISS || enemyField.getCellStatus(point) == CellStatus.HIT) {
+         if (enemyField.getCellStatus(point) == CellStatus.MISS || enemyField.getCellStatus(point) == CellStatus.HIT) {
             return;
         }
         boolean isHitSuccess = enemyField.tryHit(point);
@@ -92,7 +92,7 @@ public class BattleController extends AutoControlsManagementController {
         boolean isHitSuccess;
         do {
             isHitSuccess = playerField.tryHit(hitBot.getHit());
-            sleep(1);
+            sleep(1000);
             view.printPlayerField();
             checkWinner();
             updateStats();

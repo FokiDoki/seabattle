@@ -2,10 +2,10 @@ package org.seabattle.view.mapper;
 
 import org.seabattle.ships.ShipDirection;
 
-public class ShipDirectionMapper {
+public class ShipDirectionMapper implements Mapper<ShipDirection>{
 
 
-    public static String map(ShipDirection shipDirection) {
+    public String map(ShipDirection shipDirection) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("direction: ");
         if (shipDirection == ShipDirection.HORIZONTAL) {

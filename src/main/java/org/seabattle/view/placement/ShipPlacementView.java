@@ -10,6 +10,8 @@ import org.seabattle.view.mapper.FieldToStringMapper;
 import org.seabattle.view.mapper.ShipDirectionMapper;
 import org.seabattle.view.mapper.ShipSelectorMapper;
 
+import java.util.Collections;
+
 public class ShipPlacementView extends ViewLanterna {
 
     private final String header_name = """
@@ -30,6 +32,10 @@ public class ShipPlacementView extends ViewLanterna {
 
 
     private ShipPlacementController controller;
+
+    private final ShipSelectorMapper shipSelectorMapper = new ShipSelectorMapper();
+    private final FieldToStringMapper fieldToStringMapper = new FieldToStringMapper();
+    private final ShipDirectionMapper shipDirectionMapper = new ShipDirectionMapper();
 
     @SneakyThrows
     @Override
@@ -56,8 +62,8 @@ public class ShipPlacementView extends ViewLanterna {
             Class<? extends IShip> currentShip = controller.getCurrentShip();
             controller.getAvailableShips().forEach(ship -> {
                 TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
-                String shipFrame = ShipSelectorMapper.map(GameRules.getShipInstance(ship),
-                        String.valueOf(controller.getAvailableShipsCount(ship)));
+                String shipFrame = shipSelectorMapper.map(Collections.singletonMap(GameRules.getShipInstance(ship),
+                        String.valueOf(controller.getAvailableShipsCount(ship))));
                 colorizeBackground(color, () -> {
                     printStrings(shipFrame);
                 });
@@ -68,7 +74,7 @@ public class ShipPlacementView extends ViewLanterna {
 
     public void printRotationStatus(){
         drawFrame(new TerminalPosition(32, 7), () -> {
-            String rotationStatus = ShipDirectionMapper.map(controller.getCurrentShipDirection());
+            String rotationStatus = shipDirectionMapper.map(controller.getCurrentShipDirection());
             printStrings(rotationStatus);
         });
     }
@@ -88,7 +94,7 @@ public class ShipPlacementView extends ViewLanterna {
 
     public void printField() {
         drawFrame(new TerminalPosition(0,8), () -> {
-            String fieldString = FieldToStringMapper.map(controller.getPlayerField());
+            String fieldString = fieldToStringMapper.map(controller.getPlayerField());
             printStrings(fieldString);
         });
     }

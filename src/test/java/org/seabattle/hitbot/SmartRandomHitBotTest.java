@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class SmartRandomHitBotTest {
     Field field;
     SmartRandomHitBot smartRandomHitBot;
+    FieldToStringMapper fieldToStringMapper = new FieldToStringMapper();
     @Before
     public void setUp()  {
         field = new Field();
@@ -36,7 +37,7 @@ public class SmartRandomHitBotTest {
             }
             hits.add(new Point(hit));
             field.tryHit(hit);
-            System.out.println(FieldToStringMapper.map(field));
+            System.out.println(fieldToStringMapper.map(field));
         }
     }
 
@@ -63,7 +64,7 @@ public class SmartRandomHitBotTest {
                     throw new RuntimeException("Ship is alive after %d hits".formatted(maxComplexity));
                 }
             }
-            System.out.println(FieldToStringMapper.map(field));
+            System.out.println(fieldToStringMapper.map(field));
             if (field.isAllShipsDestroyed()){
                 break;
             }
@@ -73,7 +74,7 @@ public class SmartRandomHitBotTest {
 
     private void hitAndPrint(Point hit){
         field.tryHit(hit);
-        System.out.println(FieldToStringMapper.map(field));
+        System.out.println(fieldToStringMapper.map(field));
     }
 
     @Test
