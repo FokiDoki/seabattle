@@ -2,7 +2,6 @@ package org.seabattle.view.menu;
 
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
-import org.seabattle.view.IController;
 import org.seabattle.view.IView;
 import org.seabattle.view.ViewLanterna;
 
@@ -25,7 +24,7 @@ public class MainMenuView extends ViewLanterna {
                __..--``         /                    \\          ``--..__
               \\_______________/~~~~~~~~~~~~~~~~~~~~~~\\_______________/""";
 
-    IController controller;
+    private final MainMenuController controller;
 
     public MainMenuView(IView redirectView) {
         controller = new MainMenuController(terminal, this, redirectView);

@@ -3,7 +3,7 @@ package org.seabattle.view.placement;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import lombok.SneakyThrows;
-import org.seabattle.FIeld.GameRules;
+import org.seabattle.FIeld.ShipPlacementRules;
 import org.seabattle.ships.IShip;
 import org.seabattle.view.ViewLanterna;
 import org.seabattle.view.mapper.FieldToStringMapper;
@@ -62,7 +62,7 @@ public class ShipPlacementView extends ViewLanterna {
             Class<? extends IShip> currentShip = controller.getCurrentShip();
             controller.getAvailableShips().forEach(ship -> {
                 TextColor color = ship.equals(currentShip) ? TextColor.ANSI.BLACK_BRIGHT : TextColor.ANSI.DEFAULT;
-                String shipFrame = shipSelectorMapper.map(Collections.singletonMap(GameRules.getShipInstance(ship),
+                String shipFrame = shipSelectorMapper.map(Collections.singletonMap(ShipPlacementRules.getShipInstance(ship),
                         String.valueOf(controller.getAvailableShipsCount(ship))));
                 colorizeBackground(color, () -> {
                     printStrings(shipFrame);

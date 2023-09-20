@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import lombok.Getter;
 import org.seabattle.FIeld.Field;
 import org.seabattle.view.ViewLanterna;
+import org.seabattle.view.mapper.EnemyFieldToStringMapper;
 import org.seabattle.view.mapper.FieldToStringMapper;
 
 import java.awt.*;
@@ -50,7 +51,8 @@ public class BattleView extends ViewLanterna {
 
     private final String borderSymbol = "█";
 
-    FieldToStringMapper fieldToStringMapper = new FieldToStringMapper();
+    private final FieldToStringMapper fieldToStringMapper = new FieldToStringMapper();
+    private final EnemyFieldToStringMapper enemyFieldToStringMapper = new EnemyFieldToStringMapper();
 
 
     @Getter
@@ -63,7 +65,7 @@ public class BattleView extends ViewLanterna {
              [SPACE] - attack
             """;
 
-    BattleController controller;
+    private final BattleController controller;
     public BattleView(Field playerField, Field enemyField) {
         controller = new BattleController(terminal, playerField, enemyField, this);
     }
@@ -125,7 +127,7 @@ public class BattleView extends ViewLanterna {
 
     public void printEnemyField(){
         drawFrame(new TerminalPosition(enemyFieldLocation.x,enemyFieldLocation.y), () -> {
-            printStrings(fieldToStringMapper.map(controller.getEnemyField()));
+            printStrings(enemyFieldToStringMapper.map(controller.getEnemyField()));
         });
     }
 

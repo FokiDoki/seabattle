@@ -13,9 +13,9 @@ import java.util.List;
 public class CursorField {
 
     private final Terminal terminal;
-    Logger logger = LogManager.getLogger(CursorField.class);
+    private final Logger logger = LogManager.getLogger(CursorField.class);
 
-    List<Zone> availableZones = new ArrayList<>();
+    private final List<Zone> availableZones = new ArrayList<>();
 
 
     @SneakyThrows

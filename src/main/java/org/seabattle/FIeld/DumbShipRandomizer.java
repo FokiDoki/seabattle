@@ -24,7 +24,7 @@ public class DumbShipRandomizer implements ShipRandomizer{
         do {
             Point point = GetRandomPointOnField();
             ShipDirection direction = GetRandomDirection();
-            ship = GameRules.getShipInstance(point, direction, shipClass);
+            ship = ShipPlacementRules.getShipInstance(point, direction, shipClass);
         } while (!field.isShipCanBePlaced(ship));
         field.placeShip(ship);
     }
@@ -33,9 +33,9 @@ public class DumbShipRandomizer implements ShipRandomizer{
     @Override
     public void placeAllShips(Field field) {
         this.field = field;
-        GameRules gameRules = field.getGameRules();
-        gameRules.getAvailableShips().forEach(ship -> {
-            int shipsToPlace = gameRules.getShipsCount(ship);
+        ShipPlacementRules shipPlacementRules = field.getShipPlacementRules();
+        shipPlacementRules.getAvailableShips().forEach(ship -> {
+            int shipsToPlace = shipPlacementRules.getShipsCount(ship);
             for (int i = 0; i < shipsToPlace; i++) {
                 placeShip(ship);
             }

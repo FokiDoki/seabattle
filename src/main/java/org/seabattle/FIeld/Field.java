@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.seabattle.CellStatus;
-import org.seabattle.DefaultGameRules;
+import org.seabattle.DefaultShipPlacementRules;
 import org.seabattle.ShipAlreadyExistsException;
 import org.seabattle.ships.IShip;
 
@@ -18,29 +18,29 @@ public class Field {
 
     private final int width;
     private final int height;
-    private final GameRules gameRules;
+    private final ShipPlacementRules shipPlacementRules;
     private final List<IShip> ships = new ArrayList<>();
     private final HitsManager hitsManager = new HitsManager();
     private final Logger logger = LogManager.getLogger(Field.class);
 
     public Field() {
-        this(10, 10, new DefaultGameRules());
+        this(10, 10, new DefaultShipPlacementRules());
     }
 
-    public Field(int width, int height, GameRules gameRules) {
+    public Field(int width, int height, ShipPlacementRules shipPlacementRules) {
         this.width = width;
         this.height = height;
-        this.gameRules = gameRules;
+        this.shipPlacementRules = shipPlacementRules;
     }
 
     public void placeShip(IShip ship) {
         if (!isShipInField(ship)){
             throw new IllegalArgumentException("Ship can't be placed: out of field");
         }
-        if (!gameRules.isLimitReached(ship)){
+        if (!shipPlacementRules.isLimitReached(ship)){
             Optional<IShip> touchingShip = getShipTouching(ship);
             if (touchingShip.isEmpty()){
-                gameRules.placeShip(ship);
+                shipPlacementRules.placeShip(ship);
                 ships.add(ship);
 
             } else {

@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class GameRules {
+public class ShipPlacementRules {
     Map<Class<? extends IShip>, Integer> shipsCount;
 
-    public GameRules(Map<Class<? extends IShip>, Integer> shipsCount) {
+    public ShipPlacementRules(Map<Class<? extends IShip>, Integer> shipsCount) {
         this.shipsCount = new HashMap<>(shipsCount);
     }
 
@@ -48,7 +48,7 @@ public class GameRules {
                 .newInstance(position, direction);
     }
 
-    public boolean isGameReady(){
+    public boolean isAllShipsPlaced(){
         return shipsCount.values().stream().allMatch(count -> count == 0);
     }
 }

@@ -15,8 +15,8 @@ import java.awt.*;
 public class BattleController extends AutoControlsManagementController {
 
 
-    private Field playerField;
-    private Field enemyField;
+    private final Field playerField;
+    private final Field enemyField;
 
     private final HitBot hitBot;
 

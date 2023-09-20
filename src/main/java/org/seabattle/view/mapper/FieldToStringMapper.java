@@ -86,9 +86,7 @@ public class FieldToStringMapper implements Mapper<Field>{
     }
 
     private void appendSymbols(StringBuilder stringBuilder, int count, String symbol) {
-        for (int i = 0; i < count; i++) {
-            stringBuilder.append(symbol);
-        }
+        stringBuilder.append(symbol.repeat(Math.max(0, count)));
     }
 
 

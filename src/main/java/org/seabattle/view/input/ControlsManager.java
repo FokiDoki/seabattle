@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ControlsManager {
 
-    List<KeyListener> listeners = new ArrayList<>();
+    private final List<KeyListener> listeners = new ArrayList<>();
 
 
 
