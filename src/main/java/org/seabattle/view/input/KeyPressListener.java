@@ -4,7 +4,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class KeyPressListener extends AnyKeyReleaseListener{
 
-    String triggerKey;
+    private final String triggerKey;
 
     public KeyPressListener(String triggerKey){
         this.triggerKey = triggerKey;

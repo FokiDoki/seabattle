@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.seabattle.FIeld.DumbShipRandomizer;
 import org.seabattle.FIeld.Field;
-import org.seabattle.FIeld.GameRules;
+import org.seabattle.FIeld.ShipPlacementRules;
 import org.seabattle.FIeld.ShipRandomizer;
 import org.seabattle.ships.IShip;
 import org.seabattle.ships.ShipDirection;
@@ -17,13 +17,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ShipPlacementController extends AutoControlsManagementController {
-    ShipRandomizer shipRandomizer = new DumbShipRandomizer();
+    private final ShipRandomizer shipRandomizer = new DumbShipRandomizer();
 
     @Getter
     private final Field playerField = new Field();
 
     @Getter
-    private ArrayList<Class<? extends IShip>> availableShips = new ArrayList<>(playerField.getGameRules().getAvailableShips());
+    private ArrayList<Class<? extends IShip>> availableShips = new ArrayList<>(playerField.getShipPlacementRules().getAvailableShips());
 
     @Getter
     private Class<? extends IShip> currentShip = availableShips.get(0);
@@ -47,12 +47,8 @@ public class ShipPlacementController extends AutoControlsManagementController {
         cursorField.addAvailableZone(new TerminalPosition(5, 10), new TerminalPosition(24, 19),
                 FIELD_ZONE_NAME);
         cursorField.reset();
-
+        cursorField.addArrowListeners(controlsManager);
         controlsManager
-                .onKeyPress("Up").addListener(cursorField::moveUp).and()
-                .onKeyPress("Down").addListener(cursorField::moveDown).and()
-                .onKeyPress("Left").addListener(cursorField::moveLeft).and()
-                .onKeyPress("Right").addListener(cursorField::moveRight).and()
                 .onKeyPress("E").addListener(this::nextShip).and()
                 .onKeyPress("Space").addListener(this::placeShip).and()
                 .onKeyPress("R").addListener(this::rotateShip).and()
@@ -75,10 +71,8 @@ public class ShipPlacementController extends AutoControlsManagementController {
     }
 
     private IShip getCurrentShipInstance() {
-        Point cursorPosition = cursorField.getRelCursorPosition(FIELD_ZONE_NAME);
-        System.out.println(cursorPosition);
-        cursorPosition.x = cursorPosition.x/2;
-        return GameRules.getShipInstance(cursorPosition, currentShipDirection, currentShip);
+        Point cursorPosition = cursorField.getPixelCursorPosition(FIELD_ZONE_NAME);
+        return ShipPlacementRules.getShipInstance(cursorPosition, currentShipDirection, currentShip);
     }
 
     private void placeShipsRandomly(){
@@ -90,11 +84,11 @@ public class ShipPlacementController extends AutoControlsManagementController {
 
 
     public int getAvailableShipsCount(Class<? extends IShip> ship){
-        return playerField.getGameRules().getShipsCount(ship);
+        return playerField.getShipPlacementRules().getShipsCount(ship);
     }
 
     public void tryRedirect(){
-        if (playerField.getGameRules().isGameReady()){
+        if (playerField.getShipPlacementRules().isAllShipsPlaced()){
             redirect();
         } else {
             view.printError("Not all ships are placed.\n Use [A] to place ships randomly \n or [E] to select next ship");

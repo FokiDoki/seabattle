@@ -1,8 +1,10 @@
 package org.seabattle.FIeld;
 
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.seabattle.CellStatus;
-import org.seabattle.DefaultGameRules;
+import org.seabattle.DefaultShipPlacementRules;
 import org.seabattle.ShipAlreadyExistsException;
 import org.seabattle.ships.IShip;
 
@@ -16,25 +18,29 @@ public class Field {
 
     private final int width;
     private final int height;
-    private final GameRules gameRules;
+    private final ShipPlacementRules shipPlacementRules;
     private final List<IShip> ships = new ArrayList<>();
     private final HitsManager hitsManager = new HitsManager();
+    private final Logger logger = LogManager.getLogger(Field.class);
 
     public Field() {
-        this(10, 10, new DefaultGameRules());
+        this(10, 10, new DefaultShipPlacementRules());
     }
 
-    public Field(int width, int height, GameRules gameRules) {
+    public Field(int width, int height, ShipPlacementRules shipPlacementRules) {
         this.width = width;
         this.height = height;
-        this.gameRules = gameRules;
+        this.shipPlacementRules = shipPlacementRules;
     }
 
     public void placeShip(IShip ship) {
-        if (!gameRules.isLimitReached(ship)){
+        if (!isShipInField(ship)){
+            throw new IllegalArgumentException("Ship can't be placed: out of field");
+        }
+        if (!shipPlacementRules.isLimitReached(ship)){
             Optional<IShip> touchingShip = getShipTouching(ship);
             if (touchingShip.isEmpty()){
-                gameRules.placeShip(ship);
+                shipPlacementRules.placeShip(ship);
                 ships.add(ship);
 
             } else {
@@ -46,12 +52,30 @@ public class Field {
         }
     }
 
-    public void tryHit(Point point, Player player){
+    private boolean isShipInField(IShip ship){
+        Point shipPosition = ship.getPosition();
+        return shipPosition.x >= 0 && shipPosition.y >= 0
+                && shipPosition.x + ship.getSizeX() <= width && shipPosition.y + ship.getSizeY() <= height;
+    }
+
+    public boolean isShipCanBePlaced(IShip ship){
+        return isShipInField(ship) && getShipTouching(ship).isEmpty();
+    }
+
+    public boolean tryHit(Point point){
         Optional<IShip> ship = getShip(point);
+
         if (ship.isPresent()){
+            logger.debug("Strike to {}: hit", point);
+            hitsManager.addHit(point, CellStatus.HIT);
             ship.get().tryHit(point);
-            hitsManager.addHit(point, player);
+            return true;
+        } else {
+            logger.debug("Strike to {}: missed", point);
+            hitsManager.addHit(point, CellStatus.MISS);
+            return false;
         }
+
     }
 
     public Optional<IShip> getShipTouching(IShip ship){
@@ -73,6 +97,14 @@ public class Field {
         } else {
             return CellStatus.EMPTY;
         }
+    }
+
+    public boolean isAllShipsDestroyed(){
+        return ships.stream().noneMatch(IShip::isAlive);
+    }
+
+    public int getAliveShipsCount(){
+        return (int) ships.stream().filter(IShip::isAlive).count();
     }
 
 

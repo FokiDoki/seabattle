@@ -10,8 +10,8 @@ import java.util.List;
 
 public class AnyKeyReleaseListener implements KeyListener {
 
-    Logger logger = LogManager.getLogger(AnyKeyReleaseListener.class);
-    List<Runnable> listeners = new ArrayList<>();
+    private final Logger logger = LogManager.getLogger(AnyKeyReleaseListener.class);
+    private final List<Runnable> listeners = new ArrayList<>();
 
 
     public AnyKeyReleaseListener() {

@@ -13,12 +13,9 @@ import java.util.List;
 public class CursorField {
 
     private final Terminal terminal;
-    Logger logger = LogManager.getLogger(CursorField.class);
+    private final Logger logger = LogManager.getLogger(CursorField.class);
 
-    List<Zone> availableZones = new ArrayList<>();
-
-    Map<Zone, List<Runnable>> zoneTriggers = new HashMap<>();
-
+    private final List<Zone> availableZones = new ArrayList<>();
 
 
     @SneakyThrows
@@ -31,11 +28,14 @@ public class CursorField {
         return this;
     }
 
-    public CursorField removeAvailableZone(String name){
-        availableZones.remove(new Zone(name));
-        return this;
-    }
 
+    public void addArrowListeners(ControlsManager controlsManager){
+        controlsManager
+                .onKeyPress("Up").addListener(this::moveUp).and()
+                .onKeyPress("Down").addListener(this::moveDown).and()
+                .onKeyPress("Left").addListener(this::moveLeft).and()
+                .onKeyPress("Right").addListener(this::moveRight);
+    }
 
     private Zone getZoneByName(String name){
         System.out.println(availableZones);
@@ -59,6 +59,7 @@ public class CursorField {
 
     @SneakyThrows
     public void reset(){
+        logger.debug("Resetting cursor position to {}", availableZones.get(0).start);
         terminal.setCursorPosition(availableZones.get(0).start);
     }
 
@@ -86,6 +87,12 @@ public class CursorField {
          Point relativePos = new Point(cursorPosition.getColumn() - zoneStartPosition.getColumn(),
                 cursorPosition.getRow() - zoneStartPosition.getRow());
         logger.debug("Relative position of cursor in zone {} is {}", zoneName, relativePos);
+        return relativePos;
+    }
+
+    public Point getPixelCursorPosition(String zoneName){
+        Point relativePos = getRelCursorPosition(zoneName);
+        relativePos.x = relativePos.x/2;
         return relativePos;
     }
 

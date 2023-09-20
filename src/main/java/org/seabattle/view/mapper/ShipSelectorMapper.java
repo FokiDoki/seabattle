@@ -2,13 +2,17 @@ package org.seabattle.view.mapper;
 
 import org.seabattle.ships.IShip;
 
-public class ShipSelectorMapper {
+import java.util.Map;
 
-    public static String map(IShip ship, String shipCount){
+public class ShipSelectorMapper implements Mapper<Map<IShip, String>>{
+
+    ShipMapper shipMapper = new ShipMapper();
+
+    public String map(Map<IShip, String> shipModel){
         StringBuilder shipStringBuilder = new StringBuilder();
-        String shipFrame = ShipMapper.map(ship);
+        String shipFrame = shipMapper.map(shipModel.keySet().iterator().next());
         shipStringBuilder.append(shipFrame);
-        shipStringBuilder.append("Left - ").append(shipCount);
+        shipStringBuilder.append("Left - ").append(shipModel.values().iterator().next());
         return shipStringBuilder.toString();
     }
 }
