@@ -84,8 +84,6 @@ public class SmartRandomHitBotTest {
         smartRandomHitBot = new SmartRandomHitBot(field);
         Point hit = smartRandomHitBot.getHit();
         hitAndPrint(hit);
-
-
     }
 
 
