@@ -13,9 +13,10 @@ Sea Battle is a thrilling and strategic command-line interface (CLI) game that b
 5. Run application with `java -jar seabattle-1.0.jar` (replace with your version)
 
 ### Screenshots
-![image](https://github.com/FokiDoki/seabattle/assets/23121394/3f5a3a7b-7f7a-4637-9678-d9e33bf67eac)
-![image](https://github.com/FokiDoki/seabattle/assets/23121394/59f79d62-326a-4509-aed4-2a42895f1b63)
-![image](https://github.com/FokiDoki/seabattle/assets/23121394/edc2acdd-f685-44f7-80c7-72af16260a99)
+![image](https://github.com/FokiDoki/seabattle/assets/23121394/a7ac6d02-fcb7-4397-8d31-1e8914b5166b)
+![image](https://github.com/FokiDoki/seabattle/assets/23121394/617f3fc6-bf86-4b96-88df-fcdeddba3314)
+![image](https://github.com/FokiDoki/seabattle/assets/23121394/613e75d2-fe8d-41c4-9fa8-ab19aaeb2569)
+
 
 
 ### How to install Java 20
